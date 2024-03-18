@@ -5,4 +5,4 @@ code-quality:
     - curl -sSL https://install.python-poetry.org | python3 -
     - /root/.local/bin/poetry install
   script:
-    - pre-commit run --all-files
+    - /root/.local/bin/poetry run pre-commit run --all-files
