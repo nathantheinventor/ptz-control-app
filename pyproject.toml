@@ -10,6 +10,14 @@ readme = "README.md"
 include = "ptz_control_app"
 from = "."
 
+[[tool.poetry.packages]]
+include = "ptz_project"
+from = "."
+
+[[tool.poetry.packages]]
+include = "ptz_app"
+from = "."
+
 [tool.poetry.dependencies]
 python = "^3.11"
 Django = "^5.0.3"
