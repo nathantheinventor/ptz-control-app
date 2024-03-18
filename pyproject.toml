@@ -6,12 +6,18 @@ authors = ["Nathan Collins <nathantheinventor@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 
+[[tool.poetry.packages]]
+include = "ptz_control_app"
+from = "."
+
 [tool.poetry.dependencies]
 python = "^3.11"
 Django = "^5.0.3"
 click = "^8.1.7"
 requests = "^2.31.0"
 
+[tool.poetry.scripts]
+ptz-control-app = "ptz_control_app.main:main"
 
 [build-system]
 requires = ["poetry-core"]
