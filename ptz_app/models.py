@@ -3,6 +3,7 @@ from django.db import models
 
 class CameraSettings(models.Model):
     """Default camera settings."""
+
     aperture = models.FloatField(null=True)
     brightness = models.IntegerField(null=True)
     saturation = models.IntegerField(null=True)
@@ -15,6 +16,7 @@ class CameraSettings(models.Model):
 
 class Camera(models.Model):
     """Camera model."""
+
     name = models.CharField(max_length=100)
     ip = models.GenericIPAddressField()
     username = models.CharField(max_length=100, null=True)
@@ -24,6 +26,7 @@ class Camera(models.Model):
 
 class Preset(models.Model):
     """Camera preset model."""
+
     name = models.CharField(max_length=100)
     order = models.IntegerField()
     thumbnail = models.ImageField()
