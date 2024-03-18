@@ -31,6 +31,12 @@ ptz-control-app = "ptz_control_app.main:main"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.3.3"
 pre-commit = "^3.6.2"
+pyright = "^1.1.354"
+
+[tool.pyright]
+# ...
+venvPath = "."
+venv = ".venv"
 
 [build-system]
 requires = ["poetry-core"]
