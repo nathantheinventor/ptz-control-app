@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "ptz-camera-control-app"
+version = "0.1.0"
+description = "Web app to control settings for PTZOptics cameras"
+authors = ["Nathan Collins <nathantheinventor@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Django = "^5.0.3"
+click = "^8.1.7"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
