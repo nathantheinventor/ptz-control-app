@@ -25,18 +25,12 @@ click = "^8.1.7"
 requests = "^2.31.0"
 pillow = "^10.2.0"
 
-[tool.poetry.scripts]
-ptz-control-app = "ptz_control_app.main:main"
-
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.3.3"
 pre-commit = "^3.6.2"
-pyright = "^1.1.354"
 
-[tool.pyright]
-# ...
-venvPath = "."
-venv = ".venv"
+[tool.poetry.scripts]
+ptz-control-app = "ptz_control_app.main:main"
 
 [build-system]
 requires = ["poetry-core"]
