@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db import models
 
 
@@ -13,6 +15,17 @@ class CameraSettings(models.Model):
 
     # TODO: Find all camera settings
 
+    def json(self) -> dict[str, Any]:
+        """Return a JSON representation of the camera settings."""
+        return {
+            "aperture": self.aperture,
+            "brightness": self.brightness,
+            "saturation": self.saturation,
+            "contrast": self.contrast,
+            "sharpness": self.sharpness,
+            "hue": self.hue,
+        }
+
 
 class Camera(models.Model):
     """Camera model."""
@@ -22,6 +35,17 @@ class Camera(models.Model):
     username = models.CharField(max_length=100, null=True)
     password = models.CharField(max_length=100, null=True)
     default_settings = models.ForeignKey(CameraSettings, on_delete=models.CASCADE)
+
+    def json(self) -> dict[str, Any]:
+        """Return a JSON representation of the camera."""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "ip": self.ip,
+            "username": self.username,
+            "password": self.password,
+            "default_settings": self.default_settings.json(),
+        }
 
 
 class Preset(models.Model):
@@ -36,3 +60,18 @@ class Preset(models.Model):
     tilt = models.FloatField()
     zoom = models.FloatField()
     focus = models.FloatField()
+
+    def json(self) -> dict[str, Any]:
+        """Return a JSON representation of the camera preset."""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "order": self.order,
+            "thumbnail": self.thumbnail.url,
+            "camera": self.camera.json(),
+            "settings": self.settings.json(),
+            "pan": self.pan,
+            "tilt": self.tilt,
+            "zoom": self.zoom,
+            "focus": self.focus,
+        }

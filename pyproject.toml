@@ -28,9 +28,18 @@ pillow = "^10.2.0"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.3.3"
 pre-commit = "^3.6.2"
+mypy = "^1.7.0"
+django-stubs = {extras = ["compatible-mypy"], version = "^4.2.7"}
 
 [tool.poetry.scripts]
 ptz-control-app = "ptz_control_app.main:main"
+
+[tool.mypy]
+strict = true
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "ptz_project.settings"
 
 [build-system]
 requires = ["poetry-core"]
