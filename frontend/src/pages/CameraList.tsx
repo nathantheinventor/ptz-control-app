@@ -109,7 +109,7 @@ export function CameraList({ cameras }: { cameras: Camera[] }): JSX.Element {
   return (
     <div className="h-full flex flex-col p-4">
       <h1>Cameras</h1>
-      <div className="flex-grow">
+      <div className="flex-grow overflow-auto">
         {cameras.map((camera) => (
           <CameraDisplay key={camera.id} camera={camera} />
         ))}
