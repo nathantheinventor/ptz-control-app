@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEllipsisV,
   faPencil,
+  faPlus,
   faPlusCircle,
   faSync,
   faTrash,
@@ -97,7 +98,7 @@ function AddCamera(): JSX.Element {
     <div className="flex justify-center items-center p-4">
       <a href="/cameras/new">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Add Camera
+          <FontAwesomeIcon icon={faPlus} /> Add Camera
         </button>
       </a>
     </div>
