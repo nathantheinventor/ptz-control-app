@@ -45,6 +45,7 @@ class Camera(models.Model):
             "username": self.username,
             "password": self.password,
             "default_settings": self.default_settings.json(),
+            "presets": [preset.json() for preset in self.preset_set.all()],
         }
 
 
@@ -68,7 +69,6 @@ class Preset(models.Model):
             "name": self.name,
             "order": self.order,
             "thumbnail": self.thumbnail.url,
-            "camera": self.camera.json(),
             "settings": self.settings.json(),
             "pan": self.pan,
             "tilt": self.tilt,
