@@ -1,3 +1,23 @@
-{% load static %} test {{cameras}}
-
-<script src="{% static 'ptz_app/test.js' %}"></script>
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PTZ Control App</title>
+    <script
+      type="module"
+      crossorigin
+      src="{% static 'ptz_app/index.js' %}"
+    ></script>
+    <link
+      rel="stylesheet"
+      crossorigin
+      href="{% static 'ptz_app/index.css' %}"
+    />
+  </head>
+  <body>
+    <input type="hidden" id="data" value="{{cameras}}" />
+    <div id="camera-list" class="w-full h-full"></div>
+  </body>
+</html>
