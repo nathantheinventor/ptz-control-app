@@ -1,11 +1,11 @@
 export type CameraSettings = {
-  id: number;
-  aperture: number | null;
-  brightness: number | null;
-  saturation: number | null;
-  contrast: number | null;
-  sharpness: number | null;
-  hue: number | null;
+  id?: number;
+  aperture?: number | null;
+  brightness?: number | null;
+  saturation?: number | null;
+  contrast?: number | null;
+  sharpness?: number | null;
+  hue?: number | null;
   // TODO: Add more settings
 };
 

@@ -10,6 +10,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { Button } from "../components/Button";
 
 function AddPreset({ cameraId }: { cameraId: number }): JSX.Element {
   return (
@@ -97,9 +98,9 @@ function AddCamera(): JSX.Element {
   return (
     <div className="flex justify-center items-center p-4">
       <a href="/cameras/new">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <Button>
           <FontAwesomeIcon icon={faPlus} /> Add Camera
-        </button>
+        </Button>
       </a>
     </div>
   );
