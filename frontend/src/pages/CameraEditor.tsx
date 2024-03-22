@@ -5,6 +5,7 @@ import { Button } from "../components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { SettingsEditor } from "../components/SettingsEditor";
+import { getCsrfToken } from "../util/csrf";
 
 export function CameraEditor({
   camera,
@@ -35,6 +36,10 @@ export function CameraEditor({
         password,
         default_settings: settings,
       }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCsrfToken(),
+      },
     });
 
     window.location.href = "/";
