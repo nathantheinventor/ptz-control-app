@@ -33,6 +33,13 @@ repos:
         require_serial: true
         # Print the number of files as a sanity-check
         verbose: true
+      - id: typecheck
+        name: typecheck
+        entry: "bash -c 'cd frontend && npx tsc --noEmit'"
+        language: node
+        exclude: ^frontend/node_modules/
+        files: ^frontend/.*\.tsx?$
+        pass_filenames: false
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v8.56.0
     hooks:
