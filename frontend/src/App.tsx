@@ -1,6 +1,4 @@
-// import { CameraList } from "./pages/CameraList";
-// import { PresetEditor } from "./pages/PresetEditor";
-import { CameraEditor } from "./pages/CameraEditor";
+import { CameraList } from "./pages/CameraList";
 
 const SETTINGS = {
   id: 1,
@@ -47,8 +45,8 @@ const CAMERA = {
 function App() {
   return (
     <>
-      {/*<CameraList cameras={[CAMERA, CAMERA, CAMERA, CAMERA]}/>*/}
-      <CameraEditor camera={CAMERA} />
+      <CameraList cameras={[CAMERA, CAMERA, CAMERA, CAMERA]} />
+      {/*<CameraEditor camera={CAMERA} />*/}
       {/*<PresetEditor preset={PRESET} />*/}
     </>
   );

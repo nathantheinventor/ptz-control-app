@@ -53,3 +53,13 @@ def upsert_camera(request: HttpRequest) -> JsonResponse:
     camera.save()
 
     return JsonResponse({"status": "ok"})
+
+
+def delete_camera(request: HttpRequest, camera_id: int) -> JsonResponse:
+    """Delete a camera"""
+    from ptz_app.models import Camera
+
+    camera = Camera.objects.get(id=camera_id)
+    if camera is not None:
+        camera.delete()
+    return JsonResponse({"status": "ok"})

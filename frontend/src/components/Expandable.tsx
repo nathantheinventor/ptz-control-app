@@ -8,9 +8,14 @@ import {
 type ExpandableProps = {
   children: ReactNode;
   title: string;
+  actions?: ReactNode;
 };
 
-export function Expandable({ children, title }: ExpandableProps): JSX.Element {
+export function Expandable({
+  children,
+  title,
+  actions,
+}: ExpandableProps): JSX.Element {
   const [expanded, setExpanded] = useState(true);
   const toggle = () => setExpanded(!expanded);
 
@@ -24,6 +29,7 @@ export function Expandable({ children, title }: ExpandableProps): JSX.Element {
           />
           <span className="ml-2">{title}</span>
         </div>
+        {actions}
       </div>
       {expanded && children}
     </div>

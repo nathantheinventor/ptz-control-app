@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { Button } from "../components/Button";
+import { getCsrfToken } from "../util/csrf";
 
 function AddPreset({ cameraId }: { cameraId: number }): JSX.Element {
   return (
@@ -28,13 +29,25 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
   const togglePopover = () => setPopover(!popover);
 
   const recallPreset = () =>
-    fetch(`/presets/recall/${preset.id}`, { method: "POST" });
-  const updateThumbnail = () =>
-    fetch(`/presets/update-thumbnail/${preset.id}`, { method: "POST" });
+    fetch(`/presets/recall/${preset.id}`, {
+      method: "POST",
+      headers: { "X-CSRFToken": getCsrfToken() },
+    });
+  async function updateThumbnail() {
+    await fetch(`/presets/update-thumbnail/${preset.id}`, {
+      method: "POST",
+      headers: { "X-CSRFToken": getCsrfToken() },
+    });
+    setPopover(false);
+  }
   async function deleteThumbnail() {
     if (confirm("Are you sure you want to delete this thumbnail?")) {
-      await fetch(`/presets/delete/${preset.id}`, { method: "DELETE" });
+      await fetch(`/presets/delete/${preset.id}`, {
+        method: "DELETE",
+        headers: { "X-CSRFToken": getCsrfToken() },
+      });
     }
+    setPopover(false);
   }
 
   return (
@@ -57,7 +70,7 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
       {popover && (
         <div className="absolute top-0 right-5 bg-white text-black cursor-pointer font-bold">
           <a href={`/presets/${preset.id}`}>
-            <div className="px-2 py-1 hover:bg-gray-100 text-black">
+            <div className="px-2 py-1 hover:bg-gray-100 text-black font-bold">
               <FontAwesomeIcon icon={faPencil} /> Edit Preset
             </div>
           </a>
@@ -80,9 +93,37 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
 }
 
 function CameraDisplay({ camera }: { camera: Camera }): JSX.Element {
+  const editCamera = () => (window.location.href = `/cameras/${camera.id}`);
+
+  async function deleteCamera() {
+    if (confirm("Are you sure you want to delete this camera?")) {
+      await fetch(`/cameras/delete/${camera.id}`, {
+        method: "DELETE",
+        headers: { "X-CSRFToken": getCsrfToken() },
+      });
+      window.location.reload();
+    }
+  }
+
   return (
     <div className="mt-4">
-      <Expandable title={`${camera.name} (${camera.ip})`}>
+      <Expandable
+        title={`${camera.name} (${camera.ip})`}
+        actions={
+          <>
+            <FontAwesomeIcon
+              icon={faPencil}
+              onClick={editCamera}
+              className="text-initial cursor-pointer"
+            />
+            <FontAwesomeIcon
+              icon={faTrash}
+              onClick={deleteCamera}
+              className="text-red-500 cursor-pointer mx-2"
+            />
+          </>
+        }
+      >
         <div className="flex items-center flex-wrap">
           {camera.presets.map((preset) => (
             <PresetDisplay key={preset.id} preset={preset} />

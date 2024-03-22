@@ -63,6 +63,9 @@ export function CameraEditor({
         <Button onClick={save}>
           <FontAwesomeIcon icon={faSave} /> Save
         </Button>
+        <Button onClick={() => (window.location.href = "/")} secondary>
+          Cancel
+        </Button>
       </div>
     </div>
   );
