@@ -1,11 +1,12 @@
-import { Camera, CameraSettings } from "../util/types";
+import { Camera } from "../util/types";
 import { TextInput } from "../components/TextInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { SettingsEditor } from "../components/SettingsEditor";
 import { getCsrfToken } from "../util/csrf";
+import { Controls, ControlsEditor } from "../components/ControlsEditor";
 
 export function CameraEditor({
   camera,
@@ -16,9 +17,17 @@ export function CameraEditor({
   const [ip, setIp] = useState(camera?.ip ?? "");
   const [username, setUsername] = useState(camera?.username ?? "");
   const [password, setPassword] = useState(camera?.password ?? "");
-  const [settings, setSettings] = useState<CameraSettings>(
-    camera?.default_settings ?? {},
-  );
+  const [settings, setSettings] = useState(camera?.default_settings ?? {});
+
+  const [controls, setControls] = useState<Controls>();
+
+  useEffect(() => {
+    if (camera?.id) {
+      fetch(`/camera/controls/${camera.id}`)
+        .then((res) => res.json())
+        .then((data) => setControls(data));
+    }
+  }, [camera?.id]);
 
   async function save() {
     if (!cameraName || !ip) {
@@ -58,6 +67,9 @@ export function CameraEditor({
         <TextInput label="Username" value={username} onChange={setUsername} />
         <TextInput label="Password" value={password} onChange={setPassword} />
 
+        {camera && controls && (
+          <ControlsEditor controls={controls} cameraId={camera.id} cameraPage />
+        )}
         <SettingsEditor settings={settings} onChange={setSettings} />
 
         <Button onClick={save}>

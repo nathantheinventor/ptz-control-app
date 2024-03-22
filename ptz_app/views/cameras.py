@@ -1,6 +1,6 @@
 import json
 
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 
 CAMERA_TEMPLATE = "ptz_app/camera.html"
@@ -17,7 +17,7 @@ def edit_camera(request: HttpRequest, camera_id: int) -> HttpResponse:
 
     camera = Camera.objects.get(id=camera_id)
     if camera is None:
-        return render(request, CAMERA_TEMPLATE, {"camera": "null"})
+        raise Http404("Camera not found")
     return render(request, CAMERA_TEMPLATE, {"camera": json.dumps(camera.json())})
 
 

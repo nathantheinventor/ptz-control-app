@@ -59,7 +59,7 @@ export function SettingsEditor({
           onChange={() => setDisplayLive(!displayLive)}
         />
         <span className={`ml-2 ${settings.id == null ? "text-gray-500" : ""}`}>
-          Display Live {settings.id == null ? "(you must save first)" : ""}
+          Update Live {settings.id == null ? "(you must save first)" : ""}
         </span>
       </div>
 
