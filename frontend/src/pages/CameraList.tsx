@@ -26,6 +26,7 @@ function AddPreset({ cameraId }: { cameraId: number }): JSX.Element {
 
 function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
   const [popover, setPopover] = useState(false);
+  const [thumbnail, setThumbnail] = useState(preset.thumbnail);
   const togglePopover = () => setPopover(!popover);
 
   const recallPreset = () =>
@@ -34,10 +35,12 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
       headers: { "X-CSRFToken": getCsrfToken() },
     });
   async function updateThumbnail() {
-    await fetch(`/presets/update-thumbnail/${preset.id}`, {
+    const resp = await fetch(`/presets/update-thumbnail/${preset.id}`, {
       method: "POST",
       headers: { "X-CSRFToken": getCsrfToken() },
     });
+    const data = await resp.json();
+    setThumbnail(data.thumbnail);
     setPopover(false);
   }
   async function deleteThumbnail() {
@@ -53,7 +56,7 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
   return (
     <div className="w-64 h-36 rounded-lg m-2 relative">
       <img
-        src={preset.thumbnail}
+        src={thumbnail}
         alt={preset.name}
         className="h-full w-full rounded-lg absolute cursor-pointer"
         onClick={recallPreset}

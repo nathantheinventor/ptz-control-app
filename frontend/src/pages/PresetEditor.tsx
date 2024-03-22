@@ -2,18 +2,21 @@ import { CameraPreset } from "../util/types";
 import { useState } from "react";
 import { TextInput } from "../components/TextInput";
 import { SettingsEditor } from "../components/SettingsEditor";
-import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { faRefresh, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "../components/Button";
 import { Controls, ControlsEditor } from "../components/ControlsEditor";
+import { getCsrfToken } from "../util/csrf";
+import { NumberInput } from "../components/NumberInput";
 
 export function PresetEditor({
   preset,
 }: {
   preset: CameraPreset | null;
 }): JSX.Element {
+  const [thumbnail, setThumbnail] = useState(preset?.thumbnail ?? "");
   const [presetName, setPresetName] = useState(preset?.name ?? "");
-  const [order, setOrder] = useState(preset?.order ?? "");
+  const [order, setOrder] = useState(preset?.order ?? 0);
   const [controls, setControls] = useState<Controls>({
     pan: preset?.pan ?? 0,
     tilt: preset?.tilt ?? 0,
@@ -28,7 +31,38 @@ export function PresetEditor({
   );
 
   async function save() {
-    // TODO: Implement save
+    if (!presetName) {
+      alert("Preset Name is required");
+      return;
+    }
+
+    await fetch("/presets/upsert", {
+      method: "POST",
+      body: JSON.stringify({
+        id: preset?.id,
+        name: presetName,
+        order,
+        thumbnail,
+        ...controls,
+        settings,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCsrfToken(),
+      },
+    });
+
+    window.location.href = "/";
+  }
+
+  async function updateThumbnail() {
+    const resp = await fetch(`/presets/update-thumbnail/${preset?.id}`, {
+      method: "POST",
+      body: JSON.stringify({ controls, settings }),
+      headers: { "X-CSRFToken": getCsrfToken() },
+    });
+    const data = await resp.json();
+    setThumbnail(data.thumbnail);
   }
 
   return (
@@ -40,7 +74,28 @@ export function PresetEditor({
           value={presetName}
           onChange={setPresetName}
         />
-        <TextInput label="Order" value={order.toString()} onChange={setOrder} />
+        <NumberInput label="Order" value={order} onChange={setOrder} />
+
+        {preset && (
+          <>
+            <div className="text-xl font-bold">Thumbnail</div>
+            <div className="w-[512px] h-72 relative mb-2">
+              <img
+                src={thumbnail}
+                alt={preset.name}
+                className="absolute h-full w-full"
+              />
+              <div
+                className="cursor-pointer p-2 absolute top-0 right-0 bg-gray-500/40"
+                title="Update Thumbnail"
+                onClick={updateThumbnail}
+              >
+                <FontAwesomeIcon icon={faRefresh} />
+              </div>
+            </div>
+          </>
+        )}
+
         <ControlsEditor
           controls={controls}
           onChange={setControls}
