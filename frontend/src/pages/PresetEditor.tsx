@@ -1,4 +1,4 @@
-import { Camera, CameraPreset } from "../util/types";
+import { CameraPreset } from "../util/types";
 
 export function PresetEditor({
   preset,

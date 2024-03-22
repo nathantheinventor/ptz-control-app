@@ -1,5 +1,5 @@
-import { CameraList } from "./pages/CameraList";
-import { PresetEditor } from "./pages/PresetEditor";
+// import { CameraList } from "./pages/CameraList";
+// import { PresetEditor } from "./pages/PresetEditor";
 import { CameraEditor } from "./pages/CameraEditor";
 
 const SETTINGS = {

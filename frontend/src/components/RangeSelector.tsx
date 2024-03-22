@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 type RangeSelectorProps = {
   label: string;
   value: number | null | undefined;
@@ -13,12 +11,10 @@ export function RangeSelector({
   onChange,
   min,
   max,
-  options,
 }: RangeSelectorProps): JSX.Element {
   const disabled = value == null;
 
-  const toggleDisabled = () =>
-    onChange(disabled ? min ?? options?.[0] ?? 0 : null);
+  const toggleDisabled = () => onChange(disabled ? min : null);
 
   return (
     <div className="flex flex-col pb-2">
@@ -32,7 +28,7 @@ export function RangeSelector({
         />
         <input
           type="range"
-          value={value ?? min ?? options?.[0] ?? 0}
+          value={value ?? min}
           disabled={disabled}
           onChange={(e) => onChange(parseInt(e.target.value))}
           className="border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 transition duration-150 ease-in-out w-80"
