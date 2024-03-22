@@ -55,7 +55,7 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
         <FontAwesomeIcon icon={faEllipsisV} />
       </div>
       {popover && (
-        <div className="absolute top-0 right-5 bg-white text-black cursor-pointer">
+        <div className="absolute top-0 right-5 bg-white text-black cursor-pointer font-bold">
           <a href={`/presets/${preset.id}`}>
             <div className="px-2 py-1 hover:bg-gray-100 text-black">
               <FontAwesomeIcon icon={faPencil} /> Edit Preset

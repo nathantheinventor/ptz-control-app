@@ -19,13 +19,13 @@ export function CameraEditor({
     camera?.default_settings ?? {},
   );
 
-  function save() {
+  async function save() {
     if (!cameraName || !ip) {
       alert("All fields are required");
       return;
     }
 
-    fetch("/cameras/upsert", {
+    await fetch("/cameras/upsert", {
       method: "POST",
       body: JSON.stringify({
         id: camera?.id,
@@ -36,6 +36,8 @@ export function CameraEditor({
         default_settings: settings,
       }),
     });
+
+    window.location.href = "/";
   }
 
   return (
