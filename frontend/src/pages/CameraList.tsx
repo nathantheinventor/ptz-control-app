@@ -37,7 +37,11 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
   async function updateThumbnail() {
     const resp = await fetch(`/presets/update-thumbnail/${preset.id}`, {
       method: "POST",
-      headers: { "X-CSRFToken": getCsrfToken() },
+      body: "{}",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCsrfToken(),
+      },
     });
     const data = await resp.json();
     setThumbnail(data.thumbnail);

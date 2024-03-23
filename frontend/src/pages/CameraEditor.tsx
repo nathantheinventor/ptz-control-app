@@ -23,7 +23,10 @@ export function CameraEditor({
 
   useEffect(() => {
     if (camera?.id) {
-      fetch(`/camera/controls/${camera.id}`)
+      fetch(`/camera/controls/${camera.id}`, {
+        method: "GET",
+        headers: { "X-CSRFToken": getCsrfToken() },
+      })
         .then((res) => res.json())
         .then((data) => setControls(data));
     }

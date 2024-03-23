@@ -43,6 +43,7 @@ export function PresetEditor({
         name: presetName,
         order,
         thumbnail,
+        camera_id: cameraId,
         ...controls,
         settings,
       }),

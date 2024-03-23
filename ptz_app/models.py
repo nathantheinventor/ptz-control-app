@@ -1,6 +1,8 @@
 from typing import Any
 
 from django.db import models
+import dacite
+from ptz_app.functions.camera import Settings
 
 
 class CameraSettings(models.Model):
@@ -25,6 +27,10 @@ class CameraSettings(models.Model):
             "sharpness": self.sharpness,
             "hue": self.hue,
         }
+
+    def to_dataclass(self) -> Settings:
+        """Return a dataclass representation of the camera settings."""
+        return dacite.from_dict(Settings, self.json())
 
 
 class Camera(models.Model):

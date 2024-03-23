@@ -24,6 +24,7 @@ Django = "^5.0.3"
 click = "^8.1.7"
 requests = "^2.31.0"
 pillow = "^10.2.0"
+dacite = "^1.8.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.3.3"
@@ -37,6 +38,9 @@ ptz-control-app = "ptz_control_app.main:main"
 [tool.mypy]
 strict = true
 plugins = ["mypy_django_plugin.main"]
+
+[tool.ruff]
+line-length = 120
 
 [tool.django-stubs]
 django_settings_module = "ptz_project.settings"

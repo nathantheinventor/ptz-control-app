@@ -31,7 +31,7 @@ export function ControlsEditor({
       onChange?.(updatedControls);
 
       if (displayLive) {
-        await fetch(`/camera/update-controls/${cameraId}`, {
+        await fetch(`/cameras/update-controls/${cameraId}`, {
           method: "POST",
           body: JSON.stringify(updatedControls),
           headers: {

@@ -76,9 +76,7 @@ class Migration(migrations.Migration):
                 ("focus", models.FloatField()),
                 (
                     "camera",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="ptz_app.camera"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="ptz_app.camera"),
                 ),
                 (
                     "settings",
