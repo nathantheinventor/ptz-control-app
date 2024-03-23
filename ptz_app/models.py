@@ -29,9 +29,15 @@ class CameraSettings(models.Model):
             "hue": self.hue,
         }
 
-    def to_dataclass(self) -> Settings:
+    def to_dataclass(self, default_settings: "CameraSettings | None" = None) -> Settings:
         """Return a dataclass representation of the camera settings."""
-        return dacite.from_dict(Settings, self.json())
+        json_settings = self.json()
+        if default_settings is not None:
+            default_json = default_settings.json()
+            for key in default_json:
+                if json_settings[key] is None:
+                    json_settings[key] = default_json[key]
+        return dacite.from_dict(Settings, json_settings)
 
 
 class Camera(models.Model):

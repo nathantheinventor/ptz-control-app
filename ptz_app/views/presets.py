@@ -113,7 +113,7 @@ def recall_preset(request: HttpRequest, preset_id: int) -> JsonResponse:
     controls = Controls(pan=preset.pan, tilt=preset.tilt, zoom=preset.zoom, focus=preset.focus)
     apply_controls(camera_spec, controls)
 
-    apply_settings(camera_spec, preset.settings.to_dataclass())
+    apply_settings(camera_spec, preset.settings.to_dataclass(preset.camera.default_settings))
 
     return JsonResponse({"status": "ok"})
 

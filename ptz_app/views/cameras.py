@@ -131,7 +131,13 @@ def preview_settings(request: HttpRequest, settings_id: int) -> JsonResponse:
         camera = preset.camera
     assert camera is not None
     camera_spec = CameraSpec(ip=camera.ip, username=camera.username, password=camera.password)
-    settings_preview = dacite.from_dict(Settings, json.loads(request.body))
+
+    json_settings = json.loads(request.body)
+    if preset is not None:
+        for key, value in preset.json().items():
+            if json_settings.get(key) is None:
+                json_settings[key] = value
+    settings_preview = dacite.from_dict(Settings, json_settings)
 
     apply_settings(camera_spec, settings_preview)
 
