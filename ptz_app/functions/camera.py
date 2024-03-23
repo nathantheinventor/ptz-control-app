@@ -1,4 +1,6 @@
+import io
 from dataclasses import dataclass
+from PIL import Image
 
 
 @dataclass
@@ -51,4 +53,6 @@ def apply_settings(camera: CameraSpec, settings: Settings) -> None:
 def fetch_thumbnail(camera: CameraSpec) -> bytes:
     """Fetch the camera thumbnail."""
     # TODO: implement this function
-    return b""
+    f = io.BytesIO()
+    Image.new("RGB", (512, 288)).save(f, format="JPEG")
+    return f.getvalue()

@@ -1,3 +1,4 @@
+import base64
 from typing import Any
 
 from django.db import models
@@ -51,7 +52,7 @@ class Camera(models.Model):
             "username": self.username,
             "password": self.password,
             "default_settings": self.default_settings.json(),
-            "presets": [preset.json() for preset in self.preset_set.all()],
+            "presets": [preset.json() for preset in self.preset_set.all().order_by("order")],
         }
 
 
@@ -60,7 +61,7 @@ class Preset(models.Model):
 
     name = models.CharField(max_length=100)
     order = models.IntegerField()
-    thumbnail = models.ImageField()
+    thumbnail = models.BinaryField()
     camera = models.ForeignKey(Camera, on_delete=models.CASCADE)
     settings = models.ForeignKey(CameraSettings, on_delete=models.CASCADE)
     pan = models.FloatField()
@@ -74,7 +75,7 @@ class Preset(models.Model):
             "id": self.id,
             "name": self.name,
             "order": self.order,
-            "thumbnail": self.thumbnail.url,
+            "thumbnail": "data:image/jpeg;base64," + base64.b64encode(self.thumbnail).decode(),
             "settings": self.settings.json(),
             "pan": self.pan,
             "tilt": self.tilt,

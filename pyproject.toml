@@ -31,6 +31,7 @@ ruff = "^0.3.3"
 pre-commit = "^3.6.2"
 mypy = "^1.7.0"
 django-stubs = {extras = ["compatible-mypy"], version = "^4.2.7"}
+types-pillow = "^10.2.0.20240311"
 
 [tool.poetry.scripts]
 ptz-control-app = "ptz_control_app.main:main"

@@ -147,7 +147,7 @@ def update_thumbnail(request: HttpRequest, preset_id: int) -> JsonResponse:
         settings = preset.settings.to_dataclass()
     apply_settings(camera_spec, settings)
 
-    thumbnail = fetch_thumbnail(camera_spec)
-    preset.thumbnail.save("thumbnail.jpg", thumbnail)
+    preset.thumbnail = fetch_thumbnail(camera_spec)
+    preset.save()
 
-    return JsonResponse({"status": "ok"})
+    return JsonResponse(preset.json())

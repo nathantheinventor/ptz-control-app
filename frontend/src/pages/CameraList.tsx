@@ -54,7 +54,7 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
         headers: { "X-CSRFToken": getCsrfToken() },
       });
     }
-    setPopover(false);
+    window.location.reload();
   }
 
   return (
