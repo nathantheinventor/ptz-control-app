@@ -57,7 +57,7 @@ def _get_socket(camera: CameraSpec) -> socket.socket:
     return _sockets[camera.ip]
 
 
-def _send_command(camera: CameraSpec, command: str, query: bool = False) -> bytes | None:
+def _send_command(camera: CameraSpec, command: str, query: bool = False) -> bytes:
     """Send a command to the camera."""
     sock = _get_socket(camera)
     preamble = b"\x81" + (b"\x09" if query else b"\x01")
@@ -65,7 +65,7 @@ def _send_command(camera: CameraSpec, command: str, query: bool = False) -> byte
     sock.sendall(preamble + bytearray.fromhex(command) + terminator)
     if query:
         return sock.recv(1024)
-    return None
+    return b""
 
 
 def _hex_digits(value: int, digits: int) -> str:
@@ -150,10 +150,29 @@ def apply_controls(camera: CameraSpec, controls: Controls) -> None:
         _send_command(camera, command)
 
 
+def _parse_response(response: bytes) -> int:
+    digits = [int(x) for x in response]
+    if digits[0] > 8:
+        digits[0] -= 8
+        digits[-1] += 1
+    return sum(digit * 16 ** (len(digits) - i - 1) for i, digit in enumerate(digits))
+
+
 def read_controls(camera: CameraSpec) -> Controls:
     """Read the current state of controls from the camera."""
-    # TODO: implement this function
-    return Controls(pan=0.0, tilt=0.0, zoom=0.0, focus=0.0)
+    pan_tilt_response = _send_command(camera, "06 12", query=True)
+    zoom_response = _send_command(camera, "04 47", query=True)
+    focus_response = _send_command(camera, "04 48", query=True)
+
+    for resp in (pan_tilt_response, zoom_response, focus_response):
+        assert resp[:2] == "\x90\x50", "Invalid response"
+
+    pan = _parse_response(pan_tilt_response[2:6])
+    tilt = _parse_response(pan_tilt_response[6:10])
+    zoom = _parse_response(zoom_response[2:6])
+    focus = _parse_response(focus_response[2:6])
+
+    return Controls(pan=pan, tilt=tilt, zoom=zoom, focus=focus)
 
 
 def apply_settings(camera: CameraSpec, settings: Settings) -> None:
