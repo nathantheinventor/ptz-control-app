@@ -15,4 +15,5 @@ jobs:
           npm install --prefix frontend
           pwd
           echo $GITHUB_WORKSPACE
+          ls
           /github/home/.local/bin/poetry run pre-commit run --all-files
