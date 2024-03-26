@@ -1,5 +1,5 @@
 import { CameraPreset } from '../util/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TextInput } from '../components/TextInput';
 import { SettingsEditor } from '../components/SettingsEditor';
 import { faRefresh, faSave } from '@fortawesome/free-solid-svg-icons';
@@ -13,15 +13,30 @@ export function PresetEditor({ preset }: { preset: CameraPreset | null }): JSX.E
   const [thumbnail, setThumbnail] = useState(preset?.thumbnail ?? '');
   const [presetName, setPresetName] = useState(preset?.name ?? '');
   const [order, setOrder] = useState(preset?.order ?? 0);
-  const [controls, setControls] = useState<Controls>({
-    pan: preset?.pan ?? 0,
-    tilt: preset?.tilt ?? 0,
-    zoom: preset?.zoom ?? 1,
-    focus: preset?.focus ?? 1,
-  });
+  const [controls, setControls] = useState<Controls | undefined>(
+    preset
+      ? {
+          pan: preset.pan,
+          tilt: preset.tilt,
+          zoom: preset.zoom,
+          focus: preset.focus,
+        }
+      : undefined,
+  );
   const [settings, setSettings] = useState(preset?.settings ?? {});
 
   const cameraId = Number((document.getElementById('camera-id') as HTMLInputElement | undefined)?.value ?? 1);
+
+  useEffect(() => {
+    if (controls) return;
+    fetch(`/cameras/controls/${cameraId}`, {
+      method: 'GET',
+      headers: { 'X-CSRFToken': getCsrfToken() },
+    })
+      .then((res) => res.json())
+      .then((data) => setControls(data))
+      .catch(() => setControls({ pan: 0, tilt: 0, zoom: 0, focus: 0 })); // TODO: delete line
+  }, [cameraId, controls]);
 
   async function save() {
     if (!presetName) {
@@ -82,7 +97,7 @@ export function PresetEditor({ preset }: { preset: CameraPreset | null }): JSX.E
           </>
         )}
 
-        <ControlsEditor controls={controls} onChange={setControls} cameraId={cameraId} />
+        {controls && <ControlsEditor controls={controls} onChange={setControls} cameraId={cameraId} />}
         <SettingsEditor settings={settings} onChange={setSettings} />
 
         <Button onClick={save}>

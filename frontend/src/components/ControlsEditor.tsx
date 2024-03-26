@@ -61,22 +61,13 @@ export function ControlsEditor({ controls, onChange, cameraId, cameraPage = fals
         postfix='°'
         notNull
       />
-      <RangeSelector
-        label='Zoom'
-        value={controls.zoom}
-        onChange={updateControl('zoom')}
-        min={1}
-        max={30}
-        postfix='x'
-        notNull
-      />
+      <RangeSelector label='Zoom' value={controls.zoom} onChange={updateControl('zoom')} min={0} max={16384} notNull />
       <RangeSelector
         label='Focus'
         value={controls.focus}
         onChange={updateControl('focus')}
-        min={1}
-        max={300}
-        postfix='ft'
+        min={0}
+        max={8192}
         notNull
       />
     </div>
