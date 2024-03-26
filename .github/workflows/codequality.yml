@@ -8,8 +8,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
+          set -ex
           curl -sSL https://install.python-poetry.org | python3 -
           /github/home/.local/bin/poetry install
           apt-get update && apt-get install -y nodejs npm git
           npm install --prefix frontend
+          pwd
+          echo $GITHUB_WORKSPACE
           /github/home/.local/bin/poetry run pre-commit run --all-files
