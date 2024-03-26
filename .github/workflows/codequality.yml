@@ -8,13 +8,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
+          git config --global --add safe.directory $GITHUB_WORKSPACE
           set -ex
           curl -sSL https://install.python-poetry.org | python3 -
           /github/home/.local/bin/poetry install
-          #          apt-get update && apt-get install -y nodejs npm git
-          #          npm install --prefix frontend
-          #          pwd
-          #          ls -al
-          #          /github/home/.local/bin/poetry run pre-commit run --all-files
-          git config --global --add safe.directory $GITHUB_WORKSPACE
-          /github/home/.local/bin/poetry run pre-commit run ruff -a || cat /github/home/.cache/pre-commit/pre-commit.log
+          apt-get update && apt-get install -y nodejs npm git
+          npm install --prefix frontend
+          pwd
+          ls -al
+          /github/home/.local/bin/poetry run pre-commit run --all-files
