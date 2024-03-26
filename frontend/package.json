@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "watch": "nodemon --exec 'npm run build && mkdir -p ../static/ptz_app/ && cp dist/assets/index-*.js ../static/ptz_app/index.js && cp dist/assets/index-*.css ../static/ptz_app/index.css' --ext css,ts,tsx --ignore 'dist/*'",
+    "build-django": "npm run build && mkdir -p ../static/ptz_app/ && cp dist/assets/index-*.js ../static/ptz_app/index.js && cp dist/assets/index-*.css ../static/ptz_app/index.css",
+    "watch": "nodemon --exec 'npm run build-django' --ext css,ts,tsx --ignore 'dist/*'",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
