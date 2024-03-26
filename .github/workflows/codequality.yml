@@ -4,9 +4,9 @@ on: [push]
 jobs:
   codequality:
     runs-on: ubuntu-latest
+    container: python:3.11
     steps:
       - uses: actions/checkout@v4
-      - uses: docker://python:3.11
       - run: |
           curl -sSL https://install.python-poetry.org | python3 -
           /root/.local/bin/poetry install
