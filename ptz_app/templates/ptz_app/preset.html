@@ -5,16 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PTZ Control App</title>
-    <script
-      type="module"
-      crossorigin
-      src="{% static 'ptz_app/index.js' %}"
-    ></script>
-    <link
-      rel="stylesheet"
-      crossorigin
-      href="{% static 'ptz_app/index.css' %}"
-    />
+    <script type="module" crossorigin src="{% static 'ptz_app/index.js' %}"></script>
+    <link rel="stylesheet" crossorigin href="{% static 'ptz_app/index.css' %}" />
   </head>
   <body>
     <input type="hidden" id="data" value="{{preset}}" />

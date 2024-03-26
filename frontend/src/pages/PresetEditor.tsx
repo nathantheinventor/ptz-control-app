@@ -1,21 +1,17 @@
-import { CameraPreset } from "../util/types";
-import { useState } from "react";
-import { TextInput } from "../components/TextInput";
-import { SettingsEditor } from "../components/SettingsEditor";
-import { faRefresh, faSave } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "../components/Button";
-import { Controls, ControlsEditor } from "../components/ControlsEditor";
-import { getCsrfToken } from "../util/csrf";
-import { NumberInput } from "../components/NumberInput";
+import { CameraPreset } from '../util/types';
+import { useState } from 'react';
+import { TextInput } from '../components/TextInput';
+import { SettingsEditor } from '../components/SettingsEditor';
+import { faRefresh, faSave } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from '../components/Button';
+import { Controls, ControlsEditor } from '../components/ControlsEditor';
+import { getCsrfToken } from '../util/csrf';
+import { NumberInput } from '../components/NumberInput';
 
-export function PresetEditor({
-  preset,
-}: {
-  preset: CameraPreset | null;
-}): JSX.Element {
-  const [thumbnail, setThumbnail] = useState(preset?.thumbnail ?? "");
-  const [presetName, setPresetName] = useState(preset?.name ?? "");
+export function PresetEditor({ preset }: { preset: CameraPreset | null }): JSX.Element {
+  const [thumbnail, setThumbnail] = useState(preset?.thumbnail ?? '');
+  const [presetName, setPresetName] = useState(preset?.name ?? '');
   const [order, setOrder] = useState(preset?.order ?? 0);
   const [controls, setControls] = useState<Controls>({
     pan: preset?.pan ?? 0,
@@ -25,19 +21,16 @@ export function PresetEditor({
   });
   const [settings, setSettings] = useState(preset?.settings ?? {});
 
-  const cameraId = Number(
-    (document.getElementById("camera-id") as HTMLInputElement | undefined)
-      ?.value ?? 1,
-  );
+  const cameraId = Number((document.getElementById('camera-id') as HTMLInputElement | undefined)?.value ?? 1);
 
   async function save() {
     if (!presetName) {
-      alert("Preset Name is required");
+      alert('Preset Name is required');
       return;
     }
 
-    await fetch("/presets/upsert", {
-      method: "POST",
+    await fetch('/presets/upsert', {
+      method: 'POST',
       body: JSON.stringify({
         id: preset?.id,
         name: presetName,
@@ -48,47 +41,39 @@ export function PresetEditor({
         settings,
       }),
       headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": getCsrfToken(),
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCsrfToken(),
       },
     });
 
-    window.location.href = "/";
+    window.location.href = '/';
   }
 
   async function updateThumbnail() {
     const resp = await fetch(`/presets/update-thumbnail/${preset?.id}`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ controls, settings }),
-      headers: { "X-CSRFToken": getCsrfToken() },
+      headers: { 'X-CSRFToken': getCsrfToken() },
     });
     const data = await resp.json();
     setThumbnail(data.thumbnail);
   }
 
   return (
-    <div className="h-full flex flex-col p-4">
-      <h1>{preset ? "Edit" : "Create"} Preset</h1>
-      <div className="flex-grow overflow-auto">
-        <TextInput
-          label="Preset Name"
-          value={presetName}
-          onChange={setPresetName}
-        />
-        <NumberInput label="Order" value={order} onChange={setOrder} />
+    <div className='h-full flex flex-col p-4'>
+      <h1>{preset ? 'Edit' : 'Create'} Preset</h1>
+      <div className='flex-grow overflow-auto'>
+        <TextInput label='Preset Name' value={presetName} onChange={setPresetName} />
+        <NumberInput label='Order' value={order} onChange={setOrder} />
 
         {preset && (
           <>
-            <div className="text-xl font-bold">Thumbnail</div>
-            <div className="w-[512px] h-72 relative mb-2">
-              <img
-                src={thumbnail}
-                alt={preset.name}
-                className="absolute h-full w-full"
-              />
+            <div className='text-xl font-bold'>Thumbnail</div>
+            <div className='w-[512px] h-72 relative mb-2'>
+              <img src={thumbnail} alt={preset.name} className='absolute h-full w-full' />
               <div
-                className="cursor-pointer p-2 absolute top-0 right-0 bg-gray-500/40"
-                title="Update Thumbnail"
+                className='cursor-pointer p-2 absolute top-0 right-0 bg-gray-500/40'
+                title='Update Thumbnail'
                 onClick={updateThumbnail}
               >
                 <FontAwesomeIcon icon={faRefresh} />
@@ -97,11 +82,7 @@ export function PresetEditor({
           </>
         )}
 
-        <ControlsEditor
-          controls={controls}
-          onChange={setControls}
-          cameraId={cameraId}
-        />
+        <ControlsEditor controls={controls} onChange={setControls} cameraId={cameraId} />
         <SettingsEditor settings={settings} onChange={setSettings} />
 
         <Button onClick={save}>

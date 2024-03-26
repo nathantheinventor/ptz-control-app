@@ -1,6 +1,6 @@
-import { RangeSelector } from "./RangeSelector";
-import { useState } from "react";
-import { getCsrfToken } from "../util/csrf";
+import { RangeSelector } from './RangeSelector';
+import { useState } from 'react';
+import { getCsrfToken } from '../util/csrf';
 
 export type Controls = {
   pan: number;
@@ -16,79 +16,67 @@ type ControlsEditorProps = {
   cameraPage?: boolean;
 };
 
-export function ControlsEditor({
-  controls,
-  onChange,
-  cameraId,
-  cameraPage = false,
-}: ControlsEditorProps): JSX.Element {
+export function ControlsEditor({ controls, onChange, cameraId, cameraPage = false }: ControlsEditorProps): JSX.Element {
   const [displayLive, setDisplayLive] = useState(true);
 
-  const updateControl =
-    (key: keyof Controls) => async (value: number | null) => {
-      const updatedControls = { ...controls };
-      updatedControls[key] = value ?? 0;
-      onChange?.(updatedControls);
+  const updateControl = (key: keyof Controls) => async (value: number | null) => {
+    const updatedControls = { ...controls };
+    updatedControls[key] = value ?? 0;
+    onChange?.(updatedControls);
 
-      if (displayLive) {
-        await fetch(`/cameras/update-controls/${cameraId}`, {
-          method: "POST",
-          body: JSON.stringify(updatedControls),
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCsrfToken(),
-          },
-        });
-      }
-    };
+    if (displayLive) {
+      await fetch(`/cameras/update-controls/${cameraId}`, {
+        method: 'POST',
+        body: JSON.stringify(updatedControls),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCsrfToken(),
+        },
+      });
+    }
+  };
 
   return (
     <div>
-      <div className="text-xl font-bold">
-        Camera Controls {cameraPage ? "(not saved)" : ""}
-      </div>
+      <div className='text-xl font-bold'>Camera Controls {cameraPage ? '(not saved)' : ''}</div>
       <div>
-        <input
-          type="checkbox"
-          checked={displayLive}
-          onChange={() => setDisplayLive(!displayLive)}
-        />
-        <span className="ml-2">Update Live</span>
+        <input type='checkbox' checked={displayLive} onChange={() => setDisplayLive(!displayLive)} />
+        <span className='ml-2'>Update Live</span>
       </div>
       <RangeSelector
-        label="Pan"
+        label='Pan'
         value={controls.pan}
-        onChange={updateControl("pan")}
+        onChange={updateControl('pan')}
         min={-170}
         max={170}
-        postfix="°"
+        postfix='°'
         notNull
       />
       <RangeSelector
-        label="Tilt"
+        label='Tilt'
         value={controls.tilt}
-        onChange={updateControl("tilt")}
+        onChange={updateControl('tilt')}
         min={-20}
         max={90}
-        postfix="°"
+        postfix='°'
         notNull
       />
       <RangeSelector
-        label="Zoom"
+        label='Zoom'
         value={controls.zoom}
-        onChange={updateControl("zoom")}
+        onChange={updateControl('zoom')}
         min={1}
         max={30}
-        postfix="x"
+        postfix='x'
         notNull
       />
       <RangeSelector
-        label="Focus"
+        label='Focus'
         value={controls.focus}
-        onChange={updateControl("focus")}
+        onChange={updateControl('focus')}
         min={1}
         max={300}
-        postfix="ft"
+        postfix='ft'
         notNull
       />
     </div>

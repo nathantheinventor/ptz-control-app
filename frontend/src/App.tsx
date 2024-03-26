@@ -1,4 +1,4 @@
-import { PresetEditor } from "./pages/PresetEditor";
+import { PresetEditor } from './pages/PresetEditor';
 
 const SETTINGS = {
   id: 1,
@@ -11,9 +11,9 @@ const SETTINGS = {
 };
 const PRESET = {
   id: 1,
-  name: "Preset 1 with a very very long name",
+  name: 'Preset 1 with a very very long name',
   order: 1,
-  thumbnail: "https://placehold.co/256x144",
+  thumbnail: 'https://placehold.co/256x144',
   settings: SETTINGS,
   pan: 0,
   tilt: 0,

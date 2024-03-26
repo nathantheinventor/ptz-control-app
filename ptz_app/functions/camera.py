@@ -83,8 +83,8 @@ def _mod4(value: int) -> int:
 
 # The minimum and maximum values for each command.
 _COMMAND_LIMITS: dict[str, tuple[int, int]] = {
-    "pan": (-2447, 2448),
-    "tilt": (-430, 1296),
+    "pan": (-2447, 2448),  # 14.4 steps per degree
+    "tilt": (-430, 1296),  # 14.4 steps per degree
     "zoom": (0, 16384),
     "focus": (0, 8192),
     "iris": (0, 12),

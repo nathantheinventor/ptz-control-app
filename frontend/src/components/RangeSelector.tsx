@@ -13,7 +13,7 @@ export function RangeSelector({
   onChange,
   min,
   max,
-  postfix = "",
+  postfix = '',
   notNull = false,
 }: RangeSelectorProps): JSX.Element {
   const disabled = value == null;
@@ -21,38 +21,28 @@ export function RangeSelector({
   const toggleDisabled = () => onChange(disabled ? min : null);
 
   function promptValue() {
-    const input = prompt("Enter a value", value?.toString() ?? "");
+    const input = prompt('Enter a value', value?.toString() ?? '');
     if (input != null) {
       onChange(Number(input));
     }
   }
 
   return (
-    <div className="flex flex-col pb-2">
-      <span className="text-sm text-gray-500">{label}</span>
-      <div className="flex align-center">
-        {!notNull && (
-          <input
-            type="checkbox"
-            checked={!disabled}
-            onChange={toggleDisabled}
-            className="mr-2"
-          />
-        )}
+    <div className='flex flex-col pb-2'>
+      <span className='text-sm text-gray-500'>{label}</span>
+      <div className='flex align-center'>
+        {!notNull && <input type='checkbox' checked={!disabled} onChange={toggleDisabled} className='mr-2' />}
         <input
-          type="range"
+          type='range'
           value={value ?? min}
           disabled={!notNull && disabled}
           onChange={(e) => onChange(parseInt(e.target.value))}
-          className="border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 transition duration-150 ease-in-out w-80"
+          className='border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 transition duration-150 ease-in-out w-80'
           min={min}
           max={max}
         />
-        <span
-          className={`ml-2 cursor-pointer ${disabled ? "text-gray-500" : ""}`}
-          onClick={promptValue}
-        >
-          {value != null ? `${value}${postfix}` : "default"}
+        <span className={`ml-2 cursor-pointer ${disabled ? 'text-gray-500' : ''}`} onClick={promptValue}>
+          {value != null ? `${value}${postfix}` : 'unset'}
         </span>
       </div>
     </div>

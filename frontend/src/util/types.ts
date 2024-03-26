@@ -1,12 +1,20 @@
 export type CameraSettings = {
   id?: number;
-  aperture?: number | null;
-  brightness?: number | null;
+  iris?: number | null;
+  shutter?: number | null;
+  gain?: number | null;
+  drc?: number | null;
+  red_gain?: number | null;
+  blue_gain?: number | null;
   saturation?: number | null;
+  hue?: number | null;
+  brightness?: number | null;
   contrast?: number | null;
   sharpness?: number | null;
-  hue?: number | null;
-  // TODO: Add more settings
+  gamma?: number | null;
+  color_temperature?: number | null;
+  noise2d?: number | null;
+  noise3d?: number | null;
 };
 
 export type CameraPreset = {
