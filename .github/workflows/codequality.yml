@@ -1,0 +1,15 @@
+name: codequality
+run-name: Test lint / format / typecheck
+on: [push]
+jobs:
+  codequality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker://python:3.11
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          /root/.local/bin/poetry install
+          apt-get update && apt-get install -y nodejs npm
+          npm install --prefix frontend
+          /root/.local/bin/poetry run pre-commit run --all-files
