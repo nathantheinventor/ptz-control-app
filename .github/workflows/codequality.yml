@@ -16,4 +16,5 @@ jobs:
           #          pwd
           #          ls -al
           #          /github/home/.local/bin/poetry run pre-commit run --all-files
+          git config --global --add safe.directory $GITHUB_WORKSPACE
           /github/home/.local/bin/poetry run pre-commit run ruff -a || cat /github/home/.cache/pre-commit/pre-commit.log
