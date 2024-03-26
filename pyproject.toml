@@ -5,6 +5,7 @@ description = "Web app to control settings for PTZOptics cameras"
 authors = ["Nathan Collins <nathantheinventor@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+include = ["ptz_app/static/**/*"]
 
 [[tool.poetry.packages]]
 include = "ptz_control_app"
