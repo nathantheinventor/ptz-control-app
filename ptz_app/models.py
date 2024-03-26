@@ -30,6 +30,7 @@ class CameraSettings(models.Model):
     def json(self) -> dict[str, Any]:
         """Return a JSON representation of the camera settings."""
         return {
+            "id": self.id,
             "iris": self.iris,
             "shutter": self.shutter,
             "gain": self.gain,
@@ -50,8 +51,10 @@ class CameraSettings(models.Model):
     def to_dataclass(self, default_settings: "CameraSettings | None" = None) -> Settings:
         """Return a dataclass representation of the camera settings."""
         json_settings = self.json()
+        del json_settings["id"]
         if default_settings is not None:
             default_json = default_settings.json()
+            del default_json["id"]
             for key in default_json:
                 if json_settings[key] is None:
                     json_settings[key] = default_json[key]
