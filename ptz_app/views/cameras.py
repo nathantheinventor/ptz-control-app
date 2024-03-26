@@ -40,12 +40,21 @@ def upsert_camera(request: HttpRequest) -> JsonResponse:
 
     settings = body["default_settings"]
     default_settings = CameraSettings(
-        aperture=settings.get("aperture"),
-        brightness=settings.get("brightness"),
+        iris=settings.get("iris"),
+        shutter=settings.get("shutter"),
+        gain=settings.get("gain"),
+        drc=settings.get("drc"),
+        red_gain=settings.get("red_gain"),
+        blue_gain=settings.get("blue_gain"),
         saturation=settings.get("saturation"),
+        hue=settings.get("hue"),
+        brightness=settings.get("brightness"),
         contrast=settings.get("contrast"),
         sharpness=settings.get("sharpness"),
-        hue=settings.get("hue"),
+        gamma=settings.get("gamma"),
+        color_temperature=settings.get("color_temperature"),
+        noise2d=settings.get("noise2d"),
+        noise3d=settings.get("noise3d"),
     )
     if settings.get("id") is not None:
         default_settings.id = settings["id"]

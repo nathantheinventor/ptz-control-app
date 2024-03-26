@@ -9,24 +9,42 @@ from ptz_app.functions.camera import Settings
 class CameraSettings(models.Model):
     """Default camera settings."""
 
-    aperture = models.FloatField(null=True)
-    brightness = models.IntegerField(null=True)
+    iris = models.IntegerField(null=True)
+    shutter = models.IntegerField(null=True)
+    gain = models.IntegerField(null=True)
+    drc = models.IntegerField(null=True)
+    red_gain = models.IntegerField(null=True)
+    blue_gain = models.IntegerField(null=True)
     saturation = models.IntegerField(null=True)
+    hue = models.IntegerField(null=True)
+    brightness = models.IntegerField(null=True)
     contrast = models.IntegerField(null=True)
     sharpness = models.IntegerField(null=True)
-    hue = models.IntegerField(null=True)
+    gamma = models.IntegerField(null=True)
+    color_temperature = models.IntegerField(null=True)
+    noise2d = models.IntegerField(null=True)
+    noise3d = models.IntegerField(null=True)
 
     # TODO: Find all camera settings
 
     def json(self) -> dict[str, Any]:
         """Return a JSON representation of the camera settings."""
         return {
-            "aperture": self.aperture,
-            "brightness": self.brightness,
+            "iris": self.iris,
+            "shutter": self.shutter,
+            "gain": self.gain,
+            "drc": self.drc,
+            "red_gain": self.red_gain,
+            "blue_gain": self.blue_gain,
             "saturation": self.saturation,
+            "hue": self.hue,
+            "brightness": self.brightness,
             "contrast": self.contrast,
             "sharpness": self.sharpness,
-            "hue": self.hue,
+            "gamma": self.gamma,
+            "color_temperature": self.color_temperature,
+            "noise2d": self.noise2d,
+            "noise3d": self.noise3d,
         }
 
     def to_dataclass(self, default_settings: "CameraSettings | None" = None) -> Settings:
@@ -70,10 +88,10 @@ class Preset(models.Model):
     thumbnail = models.BinaryField()
     camera = models.ForeignKey(Camera, on_delete=models.CASCADE)
     settings = models.ForeignKey(CameraSettings, on_delete=models.CASCADE)
-    pan = models.FloatField()
-    tilt = models.FloatField()
-    zoom = models.FloatField()
-    focus = models.FloatField()
+    pan = models.IntegerField()
+    tilt = models.IntegerField()
+    zoom = models.IntegerField()
+    focus = models.IntegerField()
 
     def json(self) -> dict[str, Any]:
         """Return a JSON representation of the camera preset."""

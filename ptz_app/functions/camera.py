@@ -109,7 +109,7 @@ _COMMAND_LIMITS: dict[str, tuple[int, int]] = {
 #   we need to enable manual focus mode.
 # See the camera's manual at https://www.adorama.com/col/productManuals/PT30XSDIGYG2.pdf
 #   and https://ptzoptics.com/wp-content/uploads/2020/11/PTZOptics-VISCA-over-IP-Rev-1_2-8-20.pdf
-_COMMAND_FUNCTIONS: dict[str, Callable[[int, ...], list[str]]] = {
+_PTZ_FUNCTIONS: dict[str, Callable[[int, int], list[str]]] = {
     "pan_tilt": lambda pan, tilt: [f"06 02 18 14 {_hex_digits(_mod4(pan), 4)} {_hex_digits(tilt, 4)}"],
     # Set to manual focus mode, unlock focus, set zoom and focus, and lock focus
     "zoom_focus": lambda zoom, focus: [
@@ -118,6 +118,8 @@ _COMMAND_FUNCTIONS: dict[str, Callable[[int, ...], list[str]]] = {
         f"04 47 {_hex_digits(zoom, 4)} {_hex_digits(focus, 4)}",
         "04 68 02",
     ],
+}
+_COMMAND_FUNCTIONS: dict[str, Callable[[int], list[str]]] = {
     # Set manual exposure mode before adjusting these settings
     "iris": lambda value: ["04 39 03", f"04 4B 00 00 {_hex_digits(value, 2)}"],
     "shutter": lambda value: ["04 39 03", f"04 4A 00 00 {_hex_digits(value, 2)}"],
@@ -143,8 +145,8 @@ def apply_controls(camera: CameraSpec, controls: Controls) -> None:
         min_value, max_value = _COMMAND_LIMITS[control]
         assert min_value <= value <= max_value, f"{control} value out of range"
     commands = [
-        *_COMMAND_FUNCTIONS["pan_tilt"](controls.pan, controls.tilt),
-        *_COMMAND_FUNCTIONS["zoom_focus"](controls.zoom, controls.focus),
+        *_PTZ_FUNCTIONS["pan_tilt"](controls.pan, controls.tilt),
+        *_PTZ_FUNCTIONS["zoom_focus"](controls.zoom, controls.focus),
     ]
     for command in commands:
         _send_command(camera, command)
@@ -165,7 +167,7 @@ def read_controls(camera: CameraSpec) -> Controls:
     focus_response = _send_command(camera, "04 48", query=True)
 
     for resp in (pan_tilt_response, zoom_response, focus_response):
-        assert resp[:2] == "\x90\x50", "Invalid response"
+        assert resp[:2] == b"\x90\x50", "Invalid response"
 
     pan = _parse_response(pan_tilt_response[2:6])
     tilt = _parse_response(pan_tilt_response[6:10])
