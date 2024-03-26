@@ -1,6 +1,7 @@
 import { RangeSelector } from './RangeSelector';
 import { useState } from 'react';
 import { getCsrfToken } from '../util/csrf';
+import { PanTiltSelector } from './PanTiltSelector';
 
 export type Controls = {
   pan: number;
@@ -19,21 +20,31 @@ type ControlsEditorProps = {
 export function ControlsEditor({ controls, onChange, cameraId, cameraPage = false }: ControlsEditorProps): JSX.Element {
   const [displayLive, setDisplayLive] = useState(true);
 
-  const updateControl = (key: keyof Controls) => async (value: number | null) => {
-    const updatedControls = { ...controls };
-    updatedControls[key] = value ?? 0;
-    onChange?.(updatedControls);
-
+  const displayControls = async (controls: Controls) => {
     if (displayLive) {
       await fetch(`/cameras/update-controls/${cameraId}`, {
         method: 'POST',
-        body: JSON.stringify(updatedControls),
+        body: JSON.stringify(controls),
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': getCsrfToken(),
         },
       });
     }
+  };
+
+  const updateControl = (key: keyof Controls) => async (value: number | null) => {
+    const updatedControls = { ...controls };
+    updatedControls[key] = value ?? 0;
+    onChange?.(updatedControls);
+
+    await displayControls(updatedControls);
+  };
+
+  const updatePanTilt = async (pan: number, tilt: number) => {
+    const updatedControls = { ...controls, pan, tilt };
+    onChange?.(updatedControls);
+    await displayControls(updatedControls);
   };
 
   return (
@@ -43,24 +54,7 @@ export function ControlsEditor({ controls, onChange, cameraId, cameraPage = fals
         <input type='checkbox' checked={displayLive} onChange={() => setDisplayLive(!displayLive)} />
         <span className='ml-2'>Update Live</span>
       </div>
-      <RangeSelector
-        label='Pan'
-        value={controls.pan}
-        onChange={updateControl('pan')}
-        min={-170}
-        max={170}
-        postfix='°'
-        notNull
-      />
-      <RangeSelector
-        label='Tilt'
-        value={controls.tilt}
-        onChange={updateControl('tilt')}
-        min={-20}
-        max={90}
-        postfix='°'
-        notNull
-      />
+      <PanTiltSelector pan={controls.pan} tilt={controls.tilt} onChange={updatePanTilt} />
       <RangeSelector label='Zoom' value={controls.zoom} onChange={updateControl('zoom')} min={0} max={16384} notNull />
       <RangeSelector
         label='Focus'
