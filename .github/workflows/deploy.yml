@@ -7,7 +7,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container: python:3.11
+    environment: release
+    needs: codequality
+    permissions:
+      id-token: write
     steps:
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
       - uses: actions/checkout@v4
       - name: Deploy
         run: |
