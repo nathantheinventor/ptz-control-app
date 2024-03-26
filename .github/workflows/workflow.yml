@@ -21,10 +21,7 @@ jobs:
     container: python:3.11
     environment: release
     needs: codequality
-    on:
-      push:
-        branches:
-          - main
+    if: ${{ github.ref == 'refs/heads/main' }}
     permissions:
       id-token: write
     steps:
