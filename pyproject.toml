@@ -34,6 +34,7 @@ mypy = "^1.7.0"
 django-stubs = {extras = ["compatible-mypy"], version = "^4.2.7"}
 types-pillow = "^10.2.0.20240311"
 types-requests = "^2.31.0.20240311"
+twine = "^5.0.0"
 
 [tool.poetry.scripts]
 ptz-control-app = "ptz_control_app.main:main"
