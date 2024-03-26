@@ -14,5 +14,5 @@ jobs:
           set -ex
           curl -sSL https://install.python-poetry.org | python3 -
           /github/home/.local/bin/poetry install
-          /github/home/.local/bin/poetry run build
+          /github/home/.local/bin/poetry build
           /github/home/.local/bin/poetry run twine upload dist/*
