@@ -25,8 +25,6 @@ class CameraSettings(models.Model):
     noise2d = models.IntegerField(null=True)
     noise3d = models.IntegerField(null=True)
 
-    # TODO: Find all camera settings
-
     def json(self) -> dict[str, Any]:
         """Return a JSON representation of the camera settings."""
         return {
