@@ -25,8 +25,6 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
       - uses: actions/checkout@v4
       - name: Deploy
         run: |
@@ -34,4 +32,5 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           /github/home/.local/bin/poetry install
           /github/home/.local/bin/poetry build
-          /github/home/.local/bin/poetry run twine upload dist/*
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
