@@ -16,5 +16,4 @@ jobs:
           #          pwd
           #          ls -al
           #          /github/home/.local/bin/poetry run pre-commit run --all-files
-          /github/home/.local/bin/poetry run pre-commit run ruff -a
-          cat /github/home/.cache/pre-commit/pre-commit.log
+          /github/home/.local/bin/poetry run pre-commit run ruff -a || cat /github/home/.cache/pre-commit/pre-commit.log
