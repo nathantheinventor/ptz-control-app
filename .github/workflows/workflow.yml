@@ -1,0 +1,40 @@
+name: workflow
+run-name: CI/CD
+on: [push]
+jobs:
+  codequality:
+    runs-on: ubuntu-latest
+    container: python:3.11
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          set -ex
+          git config --global --add safe.directory $GITHUB_WORKSPACE
+          curl -sSL https://install.python-poetry.org | python3 -
+          /github/home/.local/bin/poetry install
+          apt-get update && apt-get install -y nodejs npm git
+          npm install --prefix frontend
+          /github/home/.local/bin/poetry run pre-commit run --all-files
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    container: python:3.11
+    environment: release
+    needs: codequality
+    on:
+      push:
+        branches:
+          - main
+    permissions:
+      id-token: write
+    steps:
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: actions/checkout@v4
+      - name: Deploy
+        run: |
+          set -ex
+          curl -sSL https://install.python-poetry.org | python3 -
+          /github/home/.local/bin/poetry install
+          /github/home/.local/bin/poetry build
+          /github/home/.local/bin/poetry run twine upload dist/*
