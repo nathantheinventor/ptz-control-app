@@ -2,6 +2,7 @@ import { CameraSettings } from '../util/types';
 import { useEffect, useState } from 'react';
 import { RangeSelector } from './RangeSelector';
 import { DropdownSelector } from './DropdownSelector';
+import { getCsrfToken } from '../util/csrf';
 
 const IRIS_OPTIONS = ['Closed', '11.0', '9.6', '8.0', '6.8', '5.6', '4.8', '4.0', '3.4', '2.8', '2.4', '2.0', '1.8'];
 const SHUTTER_OPTIONS = [
@@ -74,6 +75,10 @@ export function SettingsEditor({ settings, onChange }: SettingsEditorProps): JSX
       fetch(`/settings/display/${settings.id}`, {
         method: 'POST',
         body: JSON.stringify(settingsItems),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCsrfToken(),
+        },
       });
     }
   }, [

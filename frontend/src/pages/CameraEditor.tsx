@@ -19,7 +19,7 @@ export function CameraEditor({ camera }: { camera: Camera | null }): JSX.Element
 
   useEffect(() => {
     if (camera?.id) {
-      fetch(`/camera/controls/${camera.id}`, {
+      fetch(`/cameras/controls/${camera.id}`, {
         method: 'GET',
         headers: { 'X-CSRFToken': getCsrfToken() },
       })
