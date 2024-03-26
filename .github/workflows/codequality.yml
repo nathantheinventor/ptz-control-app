@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           curl -sSL https://install.python-poetry.org | python3 -
-          /root/.local/bin/poetry install
+          /github/home/.local/bin/poetry install
           apt-get update && apt-get install -y nodejs npm
           npm install --prefix frontend
-          /root/.local/bin/poetry run pre-commit run --all-files
+          /github/home/.local/bin/poetry run pre-commit run --all-files
