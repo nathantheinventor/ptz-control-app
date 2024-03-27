@@ -12,7 +12,7 @@ jobs:
           git config --global --add safe.directory $GITHUB_WORKSPACE
           curl -sSL https://install.python-poetry.org | python3 -
           /github/home/.local/bin/poetry install
-          apt-get update && apt-get install -y nodejs npm git
+          apt-get update && apt-get install -y nodejs npm
           npm install --prefix frontend
           /github/home/.local/bin/poetry run pre-commit run --all-files
   deploy:
@@ -31,6 +31,9 @@ jobs:
           set -ex
           curl -sSL https://install.python-poetry.org | python3 -
           /github/home/.local/bin/poetry install
+          apt-get update && apt-get install -y nodejs npm
+          npm install --prefix frontend
+          cd frontend && npm run build-django && cd ..
           /github/home/.local/bin/poetry build
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
