@@ -1,6 +1,8 @@
 name: workflow
 run-name: CI/CD
-on: [push]
+push:
+  branches:
+    - refs/heads/*
 jobs:
   codequality:
     runs-on: ubuntu-latest
