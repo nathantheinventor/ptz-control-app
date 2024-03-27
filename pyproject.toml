@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ptz-control-app"
-version = "0.1.0"
+version = "0.1.1"
 description = "Web app to control settings for PTZOptics cameras"
 authors = ["Nathan Collins <nathantheinventor@gmail.com>"]
 license = "MIT"
