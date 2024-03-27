@@ -61,7 +61,7 @@ export function ControlsEditor({ controls, onChange, cameraId, cameraPage = fals
         value={controls.focus}
         onChange={updateControl('focus')}
         min={0}
-        max={8192}
+        max={4096}
         notNull
       />
     </div>
