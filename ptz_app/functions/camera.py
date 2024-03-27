@@ -1,3 +1,4 @@
+import contextlib
 import socket
 from dataclasses import dataclass, asdict
 from typing import Callable
@@ -50,7 +51,7 @@ _sockets: dict[str, socket.socket] = {}
 
 def _get_socket(camera: CameraSpec) -> socket.socket:
     """Return a socket connection to the camera."""
-    if camera.ip not in _sockets:
+    if camera.ip not in _sockets or _sockets[camera.ip].fileno() == -1:
         _sockets[camera.ip] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         _sockets[camera.ip].connect((camera.ip, 5678))
         _sockets[camera.ip].settimeout(0.1)
@@ -59,7 +60,13 @@ def _get_socket(camera: CameraSpec) -> socket.socket:
 
 def _send_command(camera: CameraSpec, command: str, query: bool = False) -> bytes:
     """Send a command to the camera."""
+    print(f"Sending command {command}")
     sock = _get_socket(camera)
+    if query:
+        with contextlib.suppress(socket.timeout):
+            resp = sock.recv(1024)
+            while len(resp) == 1024:
+                resp = sock.recv(1024)
     preamble = b"\x81" + (b"\x09" if query else b"\x01")
     terminator = b"\xff"
     sock.sendall(preamble + bytearray.fromhex(command) + terminator)
@@ -110,7 +117,7 @@ _COMMAND_LIMITS: dict[str, tuple[int, int]] = {
 # See the camera's manual at https://www.adorama.com/col/productManuals/PT30XSDIGYG2.pdf
 #   and https://ptzoptics.com/wp-content/uploads/2020/11/PTZOptics-VISCA-over-IP-Rev-1_2-8-20.pdf
 _PTZ_FUNCTIONS: dict[str, Callable[[int, int], list[str]]] = {
-    "pan_tilt": lambda pan, tilt: [f"06 02 18 14 {_hex_digits(_mod4(pan), 4)} {_hex_digits(tilt, 4)}"],
+    "pan_tilt": lambda pan, tilt: [f"06 02 18 14 {_hex_digits(_mod4(pan), 4)} {_hex_digits(_mod4(tilt), 4)}"],
     # Set to manual focus mode, unlock focus, set zoom and focus, and lock focus
     "zoom_focus": lambda zoom, focus: [
         "04 38 03",
@@ -155,7 +162,7 @@ def apply_controls(camera: CameraSpec, controls: Controls) -> None:
 def _parse_response(response: bytes) -> int:
     digits = [int(x) for x in response]
     if digits[0] > 8:
-        digits[0] -= 8
+        digits[0] -= 16
         digits[-1] += 1
     return sum(digit * 16 ** (len(digits) - i - 1) for i, digit in enumerate(digits))
 
@@ -167,7 +174,7 @@ def read_controls(camera: CameraSpec) -> Controls:
     focus_response = _send_command(camera, "04 48", query=True)
 
     for resp in (pan_tilt_response, zoom_response, focus_response):
-        assert resp[:2] == b"\x90\x50", "Invalid response"
+        assert resp[:2] == b"\x90\x50", f"Invalid response {list(resp)}"
 
     pan = _parse_response(pan_tilt_response[2:6])
     tilt = _parse_response(pan_tilt_response[6:10])
