@@ -33,8 +33,6 @@ class Settings:
     shutter: int | None
     gain: int | None
     drc: int | None
-    red_gain: int | None
-    blue_gain: int | None
     saturation: int | None
     hue: int | None
     brightness: int | None
@@ -98,8 +96,6 @@ _COMMAND_LIMITS: dict[str, tuple[int, int]] = {
     "shutter": (1, 17),
     "gain": (0, 7),
     "drc": (0, 8),
-    "red_gain": (0, 255),
-    "blue_gain": (0, 255),
     "saturation": (0, 14),
     "hue": (0, 14),
     "brightness": (0, 14),
@@ -127,20 +123,18 @@ _PTZ_FUNCTIONS: dict[str, Callable[[int, int], list[str]]] = {
     ],
 }
 _COMMAND_FUNCTIONS: dict[str, Callable[[int], list[str]]] = {
-    # Set manual exposure mode before adjusting these settings
+    # Select manual exposure mode before adjusting exposure settings
     "iris": lambda value: ["04 39 03", f"04 4B 00 00 {_hex_digits(value, 2)}"],
     "shutter": lambda value: ["04 39 03", f"04 4A 00 00 {_hex_digits(value, 2)}"],
     "gain": lambda value: ["04 39 03", f"04 0C 00 00 {_hex_digits(value, 2)}"],
     "drc": lambda value: ["04 39 03", f"04 25 00 00 {_hex_digits(value, 2)}"],
-    # Set manual white balance mode before adjusting these settings
-    "red_gain": lambda value: ["04 35 05", f"04 43 00 00 {_hex_digits(value, 2)}"],
-    "blue_gain": lambda value: ["04 35 05", f"04 44 00 00 {_hex_digits(value, 2)}"],
     "hue": lambda value: [f"04 4F 00 00 00 {_hex_digits(value, 1)}"],
     "brightness": lambda value: [f"04 A1 00 00 {_hex_digits(value, 2)}"],
     "contrast": lambda value: [f"04 A2 00 00 {_hex_digits(value, 2)}"],
     "sharpness": lambda value: ["04 05 03", f"04 42 00 00 {_hex_digits(value, 2)}"],
     "gamma": lambda value: [f"04 5B {_hex_digits(value, 1)}"],
-    "color_temperature": lambda value: [f"04 20 {_hex_digits(value, 2)}"],
+    # Select color temperature white balance mode before adjusting color temperature
+    "color_temperature": lambda value: ["04 35 20", f"04 20 {_hex_digits(value, 2)}"],
     "noise2d": lambda value: ["04 50 03", f"04 53 {_hex_digits(value, 1)}"],
     "noise3d": lambda value: [f"04 54 {_hex_digits(value, 1)}"],
 }

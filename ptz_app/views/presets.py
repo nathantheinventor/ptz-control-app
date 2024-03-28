@@ -52,8 +52,6 @@ def upsert_preset(request: HttpRequest) -> JsonResponse:
         shutter=settings.get("shutter"),
         gain=settings.get("gain"),
         drc=settings.get("drc"),
-        red_gain=settings.get("red_gain"),
-        blue_gain=settings.get("blue_gain"),
         saturation=settings.get("saturation"),
         hue=settings.get("hue"),
         brightness=settings.get("brightness"),

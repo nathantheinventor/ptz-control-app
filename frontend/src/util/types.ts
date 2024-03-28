@@ -4,8 +4,6 @@ export type CameraSettings = {
   shutter?: number | null;
   gain?: number | null;
   drc?: number | null;
-  red_gain?: number | null;
-  blue_gain?: number | null;
   saturation?: number | null;
   hue?: number | null;
   brightness?: number | null;

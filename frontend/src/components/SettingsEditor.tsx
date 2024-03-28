@@ -40,8 +40,6 @@ export function SettingsEditor({ settings, onChange }: SettingsEditorProps): JSX
   const [shutter, setShutter] = useState(settings.shutter);
   const [gain, setGain] = useState(settings.gain);
   const [drc, setDRC] = useState(settings.drc);
-  const [redGain, setRedGain] = useState(settings.red_gain);
-  const [blueGain, setBlueGain] = useState(settings.blue_gain);
   const [saturation, setSaturation] = useState(settings.saturation);
   const [hue, setHue] = useState(settings.hue);
   const [brightness, setBrightness] = useState(settings.brightness);
@@ -58,8 +56,6 @@ export function SettingsEditor({ settings, onChange }: SettingsEditorProps): JSX
       shutter,
       gain,
       drc,
-      red_gain: redGain,
-      blue_gain: blueGain,
       saturation,
       hue,
       brightness,
@@ -89,8 +85,6 @@ export function SettingsEditor({ settings, onChange }: SettingsEditorProps): JSX
     shutter,
     gain,
     drc,
-    redGain,
-    blueGain,
     saturation,
     hue,
     brightness,
@@ -127,11 +121,9 @@ export function SettingsEditor({ settings, onChange }: SettingsEditorProps): JSX
         startIndex={1}
       />
       <RangeSelector label='Gain' value={gain} onChange={setGain} min={0} max={7} />
-      <RangeSelector label='DRC' value={drc} onChange={setDRC} min={0} max={8} />
+      <RangeSelector label='Dynamic Range Control' value={drc} onChange={setDRC} min={0} max={8} />
 
       <div className='text-lg font-bold'>Color</div>
-      <RangeSelector label='Red Gain' value={redGain} onChange={setRedGain} min={0} max={255} />
-      <RangeSelector label='Blue Gain' value={blueGain} onChange={setBlueGain} min={0} max={255} />
       <DropdownSelector label='Saturation' value={saturation} onChange={setSaturation} options={SATURATION_OPTIONS} />
       <RangeSelector label='Hue' value={hue} onChange={setHue} min={0} max={14} />
       <DropdownSelector

@@ -13,8 +13,6 @@ class CameraSettings(models.Model):
     shutter = models.IntegerField(null=True)
     gain = models.IntegerField(null=True)
     drc = models.IntegerField(null=True)
-    red_gain = models.IntegerField(null=True)
-    blue_gain = models.IntegerField(null=True)
     saturation = models.IntegerField(null=True)
     hue = models.IntegerField(null=True)
     brightness = models.IntegerField(null=True)
@@ -33,8 +31,6 @@ class CameraSettings(models.Model):
             "shutter": self.shutter,
             "gain": self.gain,
             "drc": self.drc,
-            "red_gain": self.red_gain,
-            "blue_gain": self.blue_gain,
             "saturation": self.saturation,
             "hue": self.hue,
             "brightness": self.brightness,
