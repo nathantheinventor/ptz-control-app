@@ -17,19 +17,49 @@ type ControlsEditorProps = {
   cameraPage?: boolean;
 };
 
+/**
+ * Queue to limit control updates to one at a time but make sure the last request gets through.
+ */
+class ControlRequestQueue {
+  private nextValue: Controls | null = null;
+  private pending = false;
+  constructor(private cameraId: number) {}
+
+  async updateControls(controls: Controls) {
+    this.nextValue = controls;
+    if (!this.pending) {
+      this.pending = true;
+      await this.sendNext();
+    }
+  }
+
+  private async sendNext() {
+    if (!this.nextValue) return;
+    if (this.pending) return;
+
+    this.pending = true;
+    const controls = this.nextValue;
+    this.nextValue = null;
+    try {
+      await fetch(`/cameras/update-controls/${this.cameraId}`, {
+        method: 'POST',
+        body: JSON.stringify(controls),
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
+      });
+    } finally {
+      this.pending = false;
+      if (this.nextValue) await this.sendNext();
+    }
+  }
+}
+
 export function ControlsEditor({ controls, onChange, cameraId, cameraPage = false }: ControlsEditorProps): JSX.Element {
   const [displayLive, setDisplayLive] = useState(true);
+  const queue = useState(new ControlRequestQueue(cameraId))[0];
 
   const displayControls = async (controls: Controls) => {
     if (displayLive) {
-      await fetch(`/cameras/update-controls/${cameraId}`, {
-        method: 'POST',
-        body: JSON.stringify(controls),
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCsrfToken(),
-        },
-      });
+      await queue.updateControls(controls);
     }
   };
 
