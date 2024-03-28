@@ -175,6 +175,17 @@ def read_controls(camera: CameraSpec) -> Controls:
     return Controls(pan=pan, tilt=tilt, zoom=zoom, focus=focus)
 
 
+def read_autofocus_value(camera: CameraSpec) -> int:
+    """Turn the camera into autofocus mode and get the focus value that the camera thinks is in focus."""
+    _send_command(camera, "04 68 03")  # Unlock focus
+    _send_command(camera, "04 38 02")  # Set to autofocus mode
+    _send_command(camera, "04 68 02")  # Lock focus
+
+    focus_response = _send_command(camera, "04 48", query=True)
+    assert focus_response[:2] == b"\x90\x50", f"Invalid response {list(focus_response)}"
+    return _parse_response(focus_response[2:6])
+
+
 def apply_settings(camera: CameraSpec, settings: Settings) -> None:
     """Apply the settings to the camera."""
     settings_dict: dict[str, int | None] = asdict(settings)

@@ -10,6 +10,7 @@ urlpatterns = [
     path("cameras/delete/<int:camera_id>", views.delete_camera, name="delete_camera"),
     path("cameras/controls/<int:camera_id>", views.get_camera_controls, name="get_camera_controls"),
     path("cameras/update-controls/<int:camera_id>", views.update_camera_controls, name="update_camera_controls"),
+    path("cameras/autofocus/<int:camera_id>", views.read_autofocus, name="read_autofocus"),
     path("settings/display/<int:settings_id>", views.preview_settings, name="apply_settings"),
     path("presets/new/<int:camera_id>", views.new_preset, name="new_preset"),
     path("presets/<int:preset_id>", views.edit_preset, name="edit_preset"),

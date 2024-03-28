@@ -2,6 +2,10 @@ import { RangeSelector } from './RangeSelector';
 import { useState } from 'react';
 import { getCsrfToken } from '../util/csrf';
 import { PanTiltSelector } from './PanTiltSelector';
+import { Button } from './Button';
+
+const AUTOFOCUS_DESCRIPTION =
+  'This command temporarily turns on autofocus to let the camera adjust to the optimal focus point. Then it saves the focus value for exact recall in the future.';
 
 export type Controls = {
   pan: number;
@@ -77,6 +81,15 @@ export function ControlsEditor({ controls, onChange, cameraId, cameraPage = fals
     await displayControls(updatedControls);
   };
 
+  async function autofocus() {
+    const resp = await fetch(`/cameras/autofocus/${cameraId}`, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCsrfToken() },
+    });
+    const focus = await resp.json();
+    onChange?.({ ...controls, focus });
+  }
+
   return (
     <div>
       <div className='text-xl font-bold'>Camera Controls {cameraPage ? '(not saved)' : ''}</div>
@@ -94,6 +107,9 @@ export function ControlsEditor({ controls, onChange, cameraId, cameraPage = fals
         max={4096}
         notNull
       />
+      <Button title={AUTOFOCUS_DESCRIPTION} onClick={autofocus}>
+        Get Autofocus Value
+      </Button>
     </div>
   );
 }

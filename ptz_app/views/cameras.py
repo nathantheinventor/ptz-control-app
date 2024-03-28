@@ -11,6 +11,7 @@ from ptz_app.functions.camera import (
     read_controls,
     apply_settings,
     Settings,
+    read_autofocus_value,
 )
 
 CAMERA_TEMPLATE = "ptz_app/camera.html"
@@ -149,3 +150,15 @@ def preview_settings(request: HttpRequest, settings_id: int) -> JsonResponse:
     apply_settings(camera_spec, settings_preview)
 
     return JsonResponse({"status": "ok"})
+
+
+def read_autofocus(request: HttpRequest, camera_id: int) -> JsonResponse:
+    """Read the autofocus status of the camera."""
+    from ptz_app.models import Camera
+
+    camera = Camera.objects.get(id=camera_id)
+    if camera is None:
+        return JsonResponse({"status": "error", "message": "Camera not found"})
+
+    camera_spec = CameraSpec(ip=camera.ip, username=camera.username, password=camera.password)
+    return JsonResponse(read_autofocus_value(camera_spec))

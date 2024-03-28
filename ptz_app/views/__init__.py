@@ -9,6 +9,7 @@ from ptz_app.views.cameras import (
     get_camera_controls,
     update_camera_controls,
     preview_settings,
+    read_autofocus,
 )
 from ptz_app.views.presets import (
     new_preset,
@@ -28,6 +29,7 @@ __all__ = [
     "get_camera_controls",
     "update_camera_controls",
     "preview_settings",
+    "read_autofocus",
     "new_preset",
     "edit_preset",
     "upsert_preset",
