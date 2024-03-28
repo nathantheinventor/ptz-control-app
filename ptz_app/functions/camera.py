@@ -62,15 +62,12 @@ def _send_command(camera: CameraSpec, command: str, query: bool = False) -> byte
     sock = _get_socket(camera)
     if query:
         with contextlib.suppress(socket.timeout):
-            resp = sock.recv(1024)
-            while len(resp) == 1024:
-                resp = sock.recv(1024)
+            sock.recv(1024**2)
     preamble = b"\x81" + (b"\x09" if query else b"\x01")
     terminator = b"\xff"
     sock.sendall(preamble + bytearray.fromhex(command) + terminator)
-    if query:
+    with contextlib.suppress(socket.timeout) if not query else contextlib.nullcontext():
         return sock.recv(1024)
-    return b""
 
 
 def _hex_digits(value: int, digits: int) -> str:
