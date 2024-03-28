@@ -128,8 +128,8 @@ export function PanTiltSelector({ pan, tilt, onChange }: PanTileSelectorProps): 
 
     const previousScale = scale.current;
     let newScale = 0;
-    if (event.deltaY > 0) newScale = Math.min(MAX_SCALE, previousScale * 1.03);
-    else newScale = Math.max(1, previousScale / 1.03);
+    if (event.deltaY > 0) newScale = Math.min(MAX_SCALE, previousScale * 1.1);
+    else newScale = Math.max(1, previousScale / 1.1);
     scale.current = newScale;
 
     // Get the point where our mouse is
