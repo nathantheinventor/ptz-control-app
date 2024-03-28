@@ -1,4 +1,6 @@
 import { CameraList } from './pages/CameraList';
+import { PresetEditor } from './pages/PresetEditor';
+import { CameraEditor } from './pages/CameraEditor';
 
 const SETTINGS = {
   id: 1,
@@ -30,12 +32,14 @@ const CAMERA = {
   presets: [PRESET, PRESET, PRESET, PRESET, PRESET, PRESET, PRESET, PRESET, PRESET, PRESET, PRESET],
 };
 
+const SHOW_PAGE: string = 'preset-editor';
+
 function App() {
   return (
     <>
-      <CameraList cameras={[CAMERA, CAMERA, CAMERA, CAMERA]} />
-      {/*<CameraEditor camera={CAMERA} />*/}
-      {/*<PresetEditor preset={PRESET} />*/}
+      {SHOW_PAGE === 'camera-list' && <CameraList cameras={[CAMERA, CAMERA, CAMERA, CAMERA]} />}
+      {SHOW_PAGE === 'camera-editor' && <CameraEditor camera={CAMERA} />}
+      {SHOW_PAGE === 'preset-editor' && <PresetEditor preset={PRESET} />}
     </>
   );
 }

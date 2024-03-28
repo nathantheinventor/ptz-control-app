@@ -1,4 +1,4 @@
-import { CameraPreset } from '../util/types';
+import { CameraPreset, CameraSettings } from '../util/types';
 import { useEffect, useState } from 'react';
 import { TextInput } from '../components/TextInput';
 import { SettingsEditor } from '../components/SettingsEditor';
@@ -8,6 +8,16 @@ import { Button } from '../components/Button';
 import { Controls, ControlsEditor } from '../components/ControlsEditor';
 import { getCsrfToken } from '../util/csrf';
 import { NumberInput } from '../components/NumberInput';
+import { Expandable } from '../components/Expandable';
+
+function isNonEmpty(settings: CameraSettings | undefined): boolean {
+  if (!settings) return false;
+  for (const [key, value] of Object.entries(settings)) {
+    if (key === 'id') continue;
+    if (value != null) return true;
+  }
+  return false;
+}
 
 export function PresetEditor({ preset }: { preset: CameraPreset | null }): JSX.Element {
   const [thumbnail, setThumbnail] = useState(preset?.thumbnail ?? '');
@@ -98,7 +108,11 @@ export function PresetEditor({ preset }: { preset: CameraPreset | null }): JSX.E
         )}
 
         {controls && <ControlsEditor controls={controls} onChange={setControls} cameraId={cameraId} />}
-        <SettingsEditor settings={settings} onChange={setSettings} />
+        <div className='my-2' />
+        <Expandable title='Camera Settings' defaultOpen={isNonEmpty(preset?.settings)}>
+          <SettingsEditor settings={settings} onChange={setSettings} />
+        </Expandable>
+        <div className='my-4' />
 
         <Button onClick={save}>
           <FontAwesomeIcon icon={faSave} /> Save
