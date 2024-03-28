@@ -51,18 +51,13 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
   }
 
   return (
-    <div className='w-64 h-36 rounded-lg m-2 relative'>
-      <img
-        src={thumbnail}
-        alt={preset.name}
-        className='h-full w-full rounded-lg absolute cursor-pointer'
-        onClick={recallPreset}
-      />
-      <span className='absolute bottom-0 px-2 py-1 w-full rounded-b-lg bg-blue-900/40 text-nowrap text-ellipsis overflow-hidden'>
+    <div className='w-64 h-36 m-2 relative'>
+      <img src={thumbnail} alt={preset.name} className='h-full w-full absolute cursor-pointer' onClick={recallPreset} />
+      <span className='absolute bottom-0 px-2 py-1 w-full bg-gray-700/50 text-white text-nowrap text-ellipsis overflow-hidden'>
         {preset.name}
       </span>
       <div
-        className='absolute top-0 right-0 px-2 py-1 bg-gray-700/40 rounded-bl-lg cursor-pointer'
+        className='absolute top-0 right-0 px-2 py-1 bg-gray-700/50 text-white cursor-pointer'
         onClick={togglePopover}
       >
         <FontAwesomeIcon icon={faEllipsisV} />

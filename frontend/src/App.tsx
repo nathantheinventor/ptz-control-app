@@ -1,4 +1,4 @@
-import { PresetEditor } from './pages/PresetEditor';
+import { CameraList } from './pages/CameraList';
 
 const SETTINGS = {
   id: 1,
@@ -20,34 +20,22 @@ const PRESET = {
   zoom: 0,
   focus: 0,
 };
-// const CAMERA = {
-//   id: 1,
-//   name: "Center Camera",
-//   ip: "192.168.1.17",
-//   username: "admin",
-//   password: "admin",
-//   default_settings: SETTINGS,
-//   presets: [
-//     PRESET,
-//     PRESET,
-//     PRESET,
-//     PRESET,
-//     PRESET,
-//     PRESET,
-//     PRESET,
-//     PRESET,
-//     PRESET,
-//     PRESET,
-//     PRESET,
-//   ],
-// };
+const CAMERA = {
+  id: 1,
+  name: 'Center Camera',
+  ip: '192.168.1.17',
+  username: 'admin',
+  password: 'admin',
+  default_settings: SETTINGS,
+  presets: [PRESET, PRESET, PRESET, PRESET, PRESET, PRESET, PRESET, PRESET, PRESET, PRESET, PRESET],
+};
 
 function App() {
   return (
     <>
-      {/*<CameraList cameras={[CAMERA, CAMERA, CAMERA, CAMERA]} />*/}
+      <CameraList cameras={[CAMERA, CAMERA, CAMERA, CAMERA]} />
       {/*<CameraEditor camera={CAMERA} />*/}
-      <PresetEditor preset={PRESET} />
+      {/*<PresetEditor preset={PRESET} />*/}
     </>
   );
 }
