@@ -161,4 +161,4 @@ def read_autofocus(request: HttpRequest, camera_id: int) -> JsonResponse:
         return JsonResponse({"status": "error", "message": "Camera not found"})
 
     camera_spec = CameraSpec(ip=camera.ip, username=camera.username, password=camera.password)
-    return JsonResponse(read_autofocus_value(camera_spec))
+    return JsonResponse({"focus": read_autofocus_value(camera_spec)})

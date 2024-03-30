@@ -86,7 +86,7 @@ export function ControlsEditor({ controls, onChange, cameraId, cameraPage = fals
       method: 'POST',
       headers: { 'X-CSRFToken': getCsrfToken() },
     });
-    const focus = await resp.json();
+    const { focus } = await resp.json();
     onChange?.({ ...controls, focus });
   }
 
