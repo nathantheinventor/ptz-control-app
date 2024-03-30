@@ -1,5 +1,6 @@
 import contextlib
 import socket
+import time
 from dataclasses import dataclass, asdict
 from typing import Callable
 
@@ -179,6 +180,8 @@ def read_autofocus_value(camera: CameraSpec) -> int:
     """Turn the camera into autofocus mode and get the focus value that the camera thinks is in focus."""
     _send_command(camera, "04 68 03")  # Unlock focus
     _send_command(camera, "04 38 02")  # Set to autofocus mode
+    time.sleep(5)  # Wait for the camera to focus
+    _send_command(camera, "04 38 03")  # Set to manual focus mode
     _send_command(camera, "04 68 02")  # Lock focus
 
     focus_response = _send_command(camera, "04 48", query=True)
