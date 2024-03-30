@@ -32,7 +32,6 @@ class ControlRequestQueue {
   async updateControls(controls: Controls) {
     this.nextValue = controls;
     if (!this.pending) {
-      this.pending = true;
       await this.sendNext();
     }
   }
