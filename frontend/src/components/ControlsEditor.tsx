@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { getCsrfToken } from '../util/csrf';
 import { PanTiltSelector } from './PanTiltSelector';
 import { Button } from './Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const AUTOFOCUS_DESCRIPTION =
   'This command temporarily turns on autofocus to let the camera adjust to the optimal focus point. Then it saves the focus value for exact recall in the future.';
@@ -59,6 +61,21 @@ class ControlRequestQueue {
 export function ControlsEditor({ controls, onChange, cameraId, cameraPage = false }: ControlsEditorProps): JSX.Element {
   const [displayLive, setDisplayLive] = useState(true);
   const queue = useState(new ControlRequestQueue(cameraId))[0];
+  const [fetching, setFetching] = useState(false);
+
+  async function fetchControls() {
+    setFetching(true);
+    try {
+      const resp = await fetch(`/cameras/controls/${cameraId}`, {
+        method: 'GET',
+        headers: { 'X-CSRFToken': getCsrfToken() },
+      });
+      const data = await resp.json();
+      onChange?.(data);
+    } finally {
+      setFetching(false);
+    }
+  }
 
   const displayControls = async (controls: Controls) => {
     if (displayLive) {
@@ -96,6 +113,17 @@ export function ControlsEditor({ controls, onChange, cameraId, cameraPage = fals
         <input type='checkbox' checked={displayLive} onChange={() => setDisplayLive(!displayLive)} />
         <span className='ml-2'>Update Live</span>
       </div>
+      <Button onClick={fetchControls} disabled={fetching}>
+        {fetching ? (
+          <>
+            <FontAwesomeIcon icon={faSpinner} spin /> Importing Controls
+          </>
+        ) : (
+          <>
+            <FontAwesomeIcon icon={faDownload} /> Import Controls from Camera
+          </>
+        )}
+      </Button>
       <PanTiltSelector pan={controls.pan} tilt={controls.tilt} onChange={updatePanTilt} />
       <RangeSelector label='Zoom' value={controls.zoom} onChange={updateControl('zoom')} min={0} max={16384} notNull />
       <RangeSelector

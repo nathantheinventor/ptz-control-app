@@ -73,7 +73,9 @@ export function CameraEditor({ camera }: { camera: Camera | null }): JSX.Element
         <TextInput label='Username' value={username} onChange={setUsername} />
         <TextInput label='Password' value={password} onChange={setPassword} />
 
-        {camera && controls && <ControlsEditor controls={controls} cameraId={camera.id} cameraPage />}
+        {camera && controls && (
+          <ControlsEditor controls={controls} onChange={setControls} cameraId={camera.id} cameraPage />
+        )}
         <SettingsEditor settings={settings} onChange={setSettings} />
 
         <Button onClick={save}>
