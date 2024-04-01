@@ -6,10 +6,10 @@ parameters of the camera such as color, exposure, and focus.
 
 ## Installation
 
-This app can be installed simply with `pipx` or `pip`:
+This app can be installed simply with `pipx` or `pip` (First you must install [Python 3.11+](https://www.python.org/downloads/) and [pipx](https://pipx.pypa.io/stable/installation/)):
 
 ```bash
-pipx install ptz-control-app  # TODO: actually set this up
+pipx install ptz-control-app
 
 # To run the app:
 ptz-control-app
