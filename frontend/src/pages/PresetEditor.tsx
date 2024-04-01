@@ -22,7 +22,8 @@ function isNonEmpty(settings: CameraSettings | undefined): boolean {
 export function PresetEditor({ preset }: { preset: CameraPreset | null }): JSX.Element {
   const [thumbnail, setThumbnail] = useState(preset?.thumbnail ?? '');
   const [presetName, setPresetName] = useState(preset?.name ?? '');
-  const [order, setOrder] = useState(preset?.order ?? 0);
+  const nextOrder = Number((document.getElementById('next-order') as HTMLInputElement | undefined)?.value ?? 1);
+  const [order, setOrder] = useState(preset?.order ?? nextOrder);
   const [controls, setControls] = useState<Controls | undefined>(
     preset
       ? {

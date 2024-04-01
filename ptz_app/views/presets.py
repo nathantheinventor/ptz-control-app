@@ -18,7 +18,14 @@ PRESET_TEMPLATE = "ptz_app/preset.html"
 
 def new_preset(request: HttpRequest, camera_id: int) -> HttpResponse:
     """Create a new camera preset."""
-    return render(request, PRESET_TEMPLATE, {"preset": "null", "camera_id": camera_id})
+    from ptz_app.models import Preset
+
+    last_preset = Preset.objects.filter(camera_id=camera_id).order_by("-order").first()
+    if last_preset is None:
+        next_order = 1
+    else:
+        next_order = last_preset.order + 1
+    return render(request, PRESET_TEMPLATE, {"preset": "null", "camera_id": camera_id, "next_order": next_order})
 
 
 def edit_preset(request: HttpRequest, preset_id: int) -> HttpResponse:
