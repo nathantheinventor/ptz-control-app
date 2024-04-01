@@ -6,11 +6,11 @@ type ExpandableProps = {
   children: ReactNode;
   title: string;
   actions?: ReactNode;
-  defaultOpen?: boolean;
+  defaultClosed?: boolean;
 };
 
-export function Expandable({ children, title, actions, defaultOpen = false }: ExpandableProps): JSX.Element {
-  const [expanded, setExpanded] = useState(defaultOpen);
+export function Expandable({ children, title, actions, defaultClosed = false }: ExpandableProps): JSX.Element {
+  const [expanded, setExpanded] = useState(!defaultClosed);
   const toggle = () => setExpanded(!expanded);
 
   return (

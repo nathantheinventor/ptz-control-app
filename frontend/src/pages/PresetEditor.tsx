@@ -120,7 +120,7 @@ export function PresetEditor({ preset }: { preset: CameraPreset | null }): JSX.E
 
         {controls && <ControlsEditor controls={controls} onChange={setControls} cameraId={cameraId} />}
         <div className='my-2' />
-        <Expandable title='Camera Settings' defaultOpen={isNonEmpty(preset?.settings)}>
+        <Expandable title='Camera Settings' defaultClosed={!isNonEmpty(preset?.settings)}>
           <SettingsEditor settings={settings} onChange={setSettings} />
         </Expandable>
         <div className='my-4' />
