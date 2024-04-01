@@ -2,7 +2,7 @@ import { CameraPreset, CameraSettings } from '../util/types';
 import { useEffect, useState } from 'react';
 import { TextInput } from '../components/TextInput';
 import { SettingsEditor } from '../components/SettingsEditor';
-import { faRefresh, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faRefresh, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../components/Button';
 import { Controls, ControlsEditor } from '../components/ControlsEditor';
@@ -86,7 +86,18 @@ export function PresetEditor({ preset }: { preset: CameraPreset | null }): JSX.E
 
   return (
     <div className='h-full flex flex-col p-4'>
-      <h1>{preset ? 'Edit' : 'Create'} Preset</h1>
+      <h1>
+        {preset ? 'Edit' : 'Create'} Preset{' '}
+        <FontAwesomeIcon
+          icon={faSave}
+          onClick={save}
+          className='text-blue-500 cursor-pointer text-2xl ml-4'
+          title='Save'
+        />
+      </h1>
+      <a href='/' className='pb-4'>
+        <FontAwesomeIcon icon={faChevronLeft} /> Back
+      </a>
       <div className='flex-grow overflow-auto'>
         <TextInput label='Preset Name' value={presetName} onChange={setPresetName} />
         <NumberInput label='Order' value={order} onChange={setOrder} />

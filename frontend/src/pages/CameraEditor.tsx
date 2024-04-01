@@ -3,7 +3,7 @@ import { TextInput } from '../components/TextInput';
 import { useEffect, useState } from 'react';
 import { Button } from '../components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faSave } from '@fortawesome/free-solid-svg-icons';
 import { SettingsEditor } from '../components/SettingsEditor';
 import { getCsrfToken } from '../util/csrf';
 import { Controls, ControlsEditor } from '../components/ControlsEditor';
@@ -55,7 +55,18 @@ export function CameraEditor({ camera }: { camera: Camera | null }): JSX.Element
 
   return (
     <div className='h-full flex flex-col p-4'>
-      <h1>{camera ? 'Edit' : 'Create'} Camera</h1>
+      <h1>
+        {camera ? 'Edit' : 'Create'} Camera{' '}
+        <FontAwesomeIcon
+          icon={faSave}
+          onClick={save}
+          className='text-blue-500 cursor-pointer text-2xl ml-4'
+          title='Save'
+        />
+      </h1>
+      <a href='/' className='pb-4'>
+        <FontAwesomeIcon icon={faChevronLeft} /> Back
+      </a>
       <div className='flex-grow overflow-auto'>
         <TextInput label='Camera Name' value={cameraName} onChange={setCameraName} />
         <TextInput label='IP Address' value={ip} onChange={setIp} />
