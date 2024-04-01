@@ -9,9 +9,9 @@ import { getCsrfToken } from '../util/csrf';
 function AddPreset({ cameraId }: { cameraId: number }): JSX.Element {
   return (
     <a href={`/presets/new/${cameraId}`}>
-      <div className='w-64 h-36 rounded-lg m-2 relative cursor-pointer bg-blue-700/40 text-white flex flex-col text-center justify-center'>
-        <FontAwesomeIcon icon={faPlusCircle} className='text-6xl' />
-        <span className='h-4 pt-2'>Create New Preset</span>
+      <div className='w-32 h-[4.5em] rounded-lg m-2 relative cursor-pointer bg-blue-700/40 text-white flex flex-col text-center justify-center'>
+        <FontAwesomeIcon icon={faPlusCircle} className='text-3xl' />
+        <span className='h-2 pt-1 text-sm'>Create New Preset</span>
       </div>
     </a>
   );
@@ -51,9 +51,9 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
   }
 
   return (
-    <div className='w-64 h-36 m-2 relative'>
+    <div className='w-32 h-[4.5em] m-2 relative'>
       <img src={thumbnail} alt={preset.name} className='h-full w-full absolute cursor-pointer' onClick={recallPreset} />
-      <span className='absolute bottom-0 px-2 py-1 w-full bg-gray-700/50 text-white text-nowrap text-ellipsis overflow-hidden'>
+      <span className='absolute bottom-0 px-2 py-1 w-full bg-gray-700/50 text-white text-sm text-nowrap text-ellipsis overflow-hidden'>
         {preset.name}
       </span>
       <div
@@ -63,7 +63,7 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
         <FontAwesomeIcon icon={faEllipsisV} />
       </div>
       {popover && (
-        <div className='absolute top-0 right-5 bg-white text-black cursor-pointer font-bold'>
+        <div className='absolute top-0 right-5 bg-white text-black cursor-pointer font-bold text-xs'>
           <a href={`/presets/${preset.id}`}>
             <div className='px-2 py-1 hover:bg-gray-100 text-black font-bold'>
               <FontAwesomeIcon icon={faPencil} /> Edit Preset
