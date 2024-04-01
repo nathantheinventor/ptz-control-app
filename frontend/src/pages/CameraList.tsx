@@ -17,16 +17,24 @@ function AddPreset({ cameraId }: { cameraId: number }): JSX.Element {
   );
 }
 
-function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
+type PresetDisplayProps = {
+  preset: CameraPreset;
+  onRecall: () => void;
+  lastSelected: boolean;
+};
+
+function PresetDisplay({ preset, onRecall, lastSelected }: PresetDisplayProps): JSX.Element {
   const [popover, setPopover] = useState(false);
   const [thumbnail, setThumbnail] = useState(preset.thumbnail);
   const togglePopover = () => setPopover(!popover);
 
-  const recallPreset = () =>
+  const recallPreset = () => {
+    onRecall();
     fetch(`/presets/recall/${preset.id}`, {
       method: 'POST',
       headers: { 'X-CSRFToken': getCsrfToken() },
     });
+  };
   async function updateThumbnail() {
     const resp = await fetch(`/presets/update-thumbnail/${preset.id}`, {
       method: 'POST',
@@ -51,7 +59,13 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
   }
 
   return (
-    <div className='w-32 h-[4.5em] m-2 relative'>
+    <div
+      className={`w-32 h-[4.5em] m-2 relative border-4 border-solid border-${
+        lastSelected ? 'green-500' : 'transparent'
+      }`}
+    >
+      {/* Tell Tailwind that these are classes we might use */}
+      <div className='display-none border-transparent border-green-500' />
       <img src={thumbnail} alt={preset.name} className='h-full w-full absolute cursor-pointer' onClick={recallPreset} />
       <span className='absolute bottom-0 px-2 py-1 w-full bg-gray-700/50 text-white text-sm text-nowrap text-ellipsis overflow-hidden'>
         {preset.name}
@@ -83,6 +97,7 @@ function PresetDisplay({ preset }: { preset: CameraPreset }): JSX.Element {
 
 function CameraDisplay({ camera }: { camera: Camera }): JSX.Element {
   const editCamera = () => (window.location.href = `/cameras/${camera.id}`);
+  const [lastPreset, setLastPreset] = useState(parseInt(localStorage.getItem(`last-preset-${camera.id}`) ?? '-1'));
 
   async function deleteCamera() {
     if (confirm('Are you sure you want to delete this camera?')) {
@@ -93,6 +108,11 @@ function CameraDisplay({ camera }: { camera: Camera }): JSX.Element {
       window.location.reload();
     }
   }
+
+  const recall = (preset: CameraPreset) => () => {
+    setLastPreset(preset.id);
+    localStorage.setItem(`last-preset-${camera.id}`, preset.id.toString());
+  };
 
   return (
     <div className='mt-4'>
@@ -107,7 +127,12 @@ function CameraDisplay({ camera }: { camera: Camera }): JSX.Element {
       >
         <div className='flex items-center flex-wrap'>
           {camera.presets.map((preset) => (
-            <PresetDisplay key={preset.id} preset={preset} />
+            <PresetDisplay
+              key={preset.id}
+              preset={preset}
+              onRecall={recall(preset)}
+              lastSelected={preset.id === lastPreset}
+            />
           ))}
           <AddPreset cameraId={camera.id} />
         </div>
