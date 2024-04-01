@@ -62,6 +62,7 @@ export function ControlsEditor({ controls, onChange, cameraId, cameraPage = fals
   const [displayLive, setDisplayLive] = useState(true);
   const queue = useState(new ControlRequestQueue(cameraId))[0];
   const [fetching, setFetching] = useState(false);
+  const [autofocusing, setAutofocusing] = useState(false);
 
   async function fetchControls() {
     setFetching(true);
@@ -98,12 +99,17 @@ export function ControlsEditor({ controls, onChange, cameraId, cameraPage = fals
   };
 
   async function autofocus() {
-    const resp = await fetch(`/cameras/autofocus/${cameraId}`, {
-      method: 'POST',
-      headers: { 'X-CSRFToken': getCsrfToken() },
-    });
-    const { focus } = await resp.json();
-    onChange?.({ ...controls, focus });
+    setAutofocusing(true);
+    try {
+      const resp = await fetch(`/cameras/autofocus/${cameraId}`, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCsrfToken() },
+      });
+      const { focus } = await resp.json();
+      onChange?.({ ...controls, focus });
+    } finally {
+      setAutofocusing(false);
+    }
   }
 
   return (
@@ -135,7 +141,13 @@ export function ControlsEditor({ controls, onChange, cameraId, cameraPage = fals
         notNull
       />
       <Button title={AUTOFOCUS_DESCRIPTION} onClick={autofocus}>
-        Get Autofocus Value
+        {autofocusing ? (
+          <>
+            <FontAwesomeIcon icon={faSpinner} spin /> Getting Autofocus
+          </>
+        ) : (
+          'Get Autofocus Value'
+        )}
       </Button>
     </div>
   );

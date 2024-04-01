@@ -52,8 +52,8 @@ _sockets: dict[str, socket.socket] = {}
 def _with_socket(camera: CameraSpec, timeout: float = 0.1) -> Generator[socket.socket, None, None]:
     """Return a context manager that provides a socket connection."""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((camera.ip, 5678))
     sock.settimeout(timeout)
+    sock.connect((camera.ip, 5678))
     try:
         yield sock
     finally:
