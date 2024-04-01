@@ -2,7 +2,7 @@ import contextlib
 import socket
 import time
 from dataclasses import dataclass, asdict
-from typing import Callable
+from typing import Callable, Generator
 
 import requests
 
@@ -48,27 +48,30 @@ class Settings:
 _sockets: dict[str, socket.socket] = {}
 
 
-def _get_socket(camera: CameraSpec) -> socket.socket:
-    """Return a socket connection to the camera."""
-    if camera.ip not in _sockets or _sockets[camera.ip].fileno() == -1:
-        _sockets[camera.ip] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        _sockets[camera.ip].connect((camera.ip, 5678))
-        _sockets[camera.ip].settimeout(0.1)
-    return _sockets[camera.ip]
+@contextlib.contextmanager
+def _with_socket(camera: CameraSpec, timeout: float = 0.1) -> Generator[socket.socket, None, None]:
+    """Return a context manager that provides a socket connection."""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((camera.ip, 5678))
+    sock.settimeout(timeout)
+    try:
+        yield sock
+    finally:
+        sock.close()
 
 
-def _send_command(camera: CameraSpec, command: str, query: bool = False) -> bytes:
+def _send_command(camera: CameraSpec, command: str, query: bool = False, timeout: float = 0.1) -> bytes:
     """Send a command to the camera."""
     print(f"Sending command {command}")
-    sock = _get_socket(camera)
-    if query:
-        with contextlib.suppress(socket.timeout):
-            sock.recv(1024**2)
-    preamble = b"\x81" + (b"\x09" if query else b"\x01")
-    terminator = b"\xff"
-    sock.sendall(preamble + bytearray.fromhex(command) + terminator)
-    with contextlib.suppress(socket.timeout) if not query else contextlib.nullcontext():
-        return sock.recv(1024)
+    with _with_socket(camera, timeout=timeout) as sock:
+        if query:
+            with contextlib.suppress(socket.timeout):
+                sock.recv(1024**2)
+        preamble = b"\x81" + (b"\x09" if query else b"\x01")
+        terminator = b"\xff"
+        sock.sendall(preamble + bytearray.fromhex(command) + terminator)
+        with contextlib.suppress(socket.timeout) if not query else contextlib.nullcontext():
+            return sock.recv(1024)
 
 
 def _hex_digits(value: int, digits: int) -> str:
@@ -148,7 +151,7 @@ def apply_controls(camera: CameraSpec, controls: Controls) -> None:
         *_PTZ_FUNCTIONS["zoom_focus"](controls.zoom, controls.focus),
     ]
     for command in commands:
-        _send_command(camera, command)
+        _send_command(camera, command, timeout=2.0)
 
 
 def _parse_response(response: bytes) -> int:
