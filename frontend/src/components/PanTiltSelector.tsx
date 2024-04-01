@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown, faChevronLeft, faChevronRight, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
 type PanTileSelectorProps = {
   pan: number;
@@ -159,7 +161,23 @@ export function PanTiltSelector({ pan, tilt, onChange }: PanTileSelectorProps): 
   return (
     <div className='flex flex-col pb-2'>
       <span className='text-sm text-gray-500'>Pan / Tilt Selector</span>
-      <canvas className='w-[34em] h-[12em]' ref={canvas} onClick={onClick} />
+      <div className='flex items-center'>
+        <div className='p-2 hover:bg-gray-100 mr-2 cursor-pointer'>
+          <FontAwesomeIcon icon={faChevronLeft} onClick={() => onChange(Math.max(MIN_PAN, pan - 1), tilt)} />
+        </div>
+        <div className='flex flex-col items-center'>
+          <div className='p-2 hover:bg-gray-100 mb-2 cursor-pointer'>
+            <FontAwesomeIcon icon={faChevronUp} onClick={() => onChange(pan, Math.min(MAX_TILT, tilt + 1))} />
+          </div>
+          <canvas className='w-[34em] h-[12em]' ref={canvas} onClick={onClick} />
+          <div className='p-2 hover:bg-gray-100 mt-2 cursor-pointer'>
+            <FontAwesomeIcon icon={faChevronDown} onClick={() => onChange(pan, Math.max(MIN_TILT, tilt - 1))} />
+          </div>
+        </div>
+        <div className='p-2 hover:bg-gray-100 ml-2 cursor-pointer'>
+          <FontAwesomeIcon icon={faChevronRight} onClick={() => onChange(Math.min(MAX_PAN, pan + 1), tilt)} />
+        </div>
+      </div>
       <span className='text-sm font-bold'>Pan: {(pan / 14.4).toFixed(2)}&deg;</span>
       <span className='text-sm font-bold'>Tilt: {(tilt / 14.4).toFixed(2)}&deg;</span>
     </div>
